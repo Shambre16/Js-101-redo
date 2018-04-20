@@ -1,0 +1,11 @@
+.book-background {
+  background-image: url("https://qzprod.files.wordpress.com/2016/05/books.jpg?quality=80&strip=all&w=2000");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  /* Maybe mess with the hsla to get background to be less noisy */
+}
+
+.opaque-background {
+  background-color: rgba(255, 255, 255, .85);
+}
