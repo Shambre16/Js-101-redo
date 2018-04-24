@@ -3,14 +3,16 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="css/stylesheet.css">
     <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/datatables.css">
+    <link rel="stylesheet" href="css/stylesheet.css">
+    <link rel="stylesheet" href="css/fontello.css">
     <title>Welcome to My Library!</title>
   </head>
   <body>
-    <button type="button" name="button" class="alert">OnClick Alert Me</button>
+    <!-- <button type="button" name="button" class="alert">OnClick Alert Me</button>
     <button type="button" name="button" class="change-text">OnClick Change Text</button>
-    <button type="button" name="button" class="log-hello">OnClick Console Log Hello!</button>
+    <button type="button" name="button" class="log-hello">OnClick Console Log Hello!</button> -->
 
     <!-- A display area for your library (a bootstrap table with rows for each book),
     a way to delete that book from the table,
@@ -19,103 +21,108 @@
     <div class="container-fluid book-background">
       <div class="container opaque-background">
       <!-- Navigation Bar -->
-      <nav class="navbar" style="background-color: #ffffff;">
-        <ul class="nav nav-pills">
-          <li class="nav-item dropdown">
-            <a class="nav-link active dropdown-toggle btn-info" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Create a Library</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">Add a Single Book by Title</a>
-              <a class="dropdown-item" href="#">Add Multiple Books by Title</a>
-              <button class="dropdown-item onclick=buildTable();" href="#">Add All Books</button>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Remove a Single Book by Title</a>
-              <a class="dropdown-item" href="#">Remove a Book/s by Author</a>
-            </div>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link active dropdown-toggle btn-info" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Get Books</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">Get a Single Book by Title</a>
-              <a class="dropdown-item" href="#">Get a Book/s by Author</a>
-            </div>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link active dropdown-toggle btn-info" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">For the Adventurous Type!</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">Get a Random Book by Title</a>
-              <a class="dropdown-item" href="#">Get a Random Author</a>
-            </div>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link active dropdown-toggle btn-info" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Library Options</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">View Featured Authors</a>
-              <a class="dropdown-item" href="#">Save your Library</a>
-              <a class="dropdown-item" href="#">Load a Saved Library</a>
-              <a class="dropdown-item" href="#">Clear your Saved Library</a>
-            </div>
-          </li>
-        </ul>
-      </nav>
+        <nav class="nav-fill" style="background-color: #ffffff;">
+          <ul class="nav nav-pills">
+            <li class="nav-item dropdown">
+              <a class="nav-link active dropdown-toggle btn-info" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Create a Library</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Add a Single Book by Title</a>
+                <a class="dropdown-item" href="#">Add Multiple Books by Title</a>
+                <button class="dropdown-item" id="buildTableButton" onclick="buildTable();" href="#">Add All Books</button>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Remove a Single Book by Title</a>
+                <a class="dropdown-item" href="#">Remove a Book/s by Author</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link active dropdown-toggle btn-info" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Get Books</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Get a Single Book by Title</a>
+                <a class="dropdown-item" href="#">Get a Book/s by Author</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link active dropdown-toggle btn-info" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">For the Adventurous Type!</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Get a Random Book by Title</a>
+                <a class="dropdown-item" href="#">Get a Random Author</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link active dropdown-toggle btn-info" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Library Options</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">View Featured Authors</a>
+                <a class="dropdown-item" href="#">Save your Library</a>
+                <a class="dropdown-item" href="#">Load a Saved Library</a>
+                <a class="dropdown-item" href="#">Clear your Saved Library</a>
+              </div>
+            </li>
+          </ul>
+        </nav>
       <!-- Jumbotron -->
       <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-          <h1 class="display-4">Welcome to Your Library!</h1>
-          <p class="lead">This library has been created so that you can customize it.</p>
-          <div class="well">
-            <div class="card-deck single-card">
-              <div class="card">
-                <img class="card-img-top" src="javascript:void(0)" alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+        <div class="container row">
+          <div class="col-md-6">
+            <h1 class="display-4">Welcome to Your Library!</h1>
+            <p class="lead">This library has been created so that you can customize it.</p>
+          </div>
+          <div class="col-md-6">
+            <div class="well">
+              <div class="card-deck single-card">
+                <div class="card">
+                  <img class="card-img-top" src="javascript:void(0)" alt="Card image cap">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                  </div>
+                  <div class="card-footer">
+                    <small class="text-muted">Last updated 3 mins ago</small>
+                  </div>
                 </div>
-                <div class="card-footer">
-                  <small class="text-muted">Last updated 3 mins ago</small>
+                <!-- <div class="card">
+                  <img class="card-img-top" src="javascript:void(0)" alt="Card image cap">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+                  </div>
+                  <div class="card-footer">
+                    <small class="text-muted">Last updated 3 mins ago</small>
+                  </div>
                 </div>
-              </div>
-              <div class="card">
-                <img class="card-img-top" src="javascript:void(0)" alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                </div>
-                <div class="card-footer">
-                  <small class="text-muted">Last updated 3 mins ago</small>
-                </div>
-              </div>
-              <div class="card">
-                <img class="card-img-top" src="javascript:void(0)" alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                </div>
-                <div class="card-footer">
-                  <small class="text-muted">Last updated 3 mins ago</small>
-                </div>
+                <div class="card">
+                  <img class="card-img-top" src="javascript:void(0)" alt="Card image cap">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+                  </div>
+                  <div class="card-footer">
+                    <small class="text-muted">Last updated 3 mins ago</small>
+                  </div>
+                </div> -->
               </div>
             </div>
           </div>
-        </div>
-        <div>
-          <nav class="navbar navbar-light justify-content-center">
-            <form class="form-inline">
-              <input class="form-control mr-sm-2 searchBox" type="search" placeholder="Search by Title/Author" aria-label="Search">
-              <button class="btn btn-outline-info my-2 my-sm-0 search" type="submit">Search</button>
-            </form>
-          </nav>
+        <!-- Search bar -->
+          <div>
+            <nav class="navbar navbar-light justify-content-center">
+              <form class="form-inline">
+                <input class="form-control mr-sm-2 searchBox" type="search" placeholder="Search by Title/Author" aria-label="Search">
+                <button class="btn btn-outline-info my-2 my-sm-0 searchButton" type="submit">Search<i class="demo-icon icon-search"></i></button>
+              </form>
+            </nav>
+          </div>
         </div>
       </div>
-        <!-- Search bar -->
       <!-- Booklist -->
       <table class="table table-hover table-info">
         <thead>
           <tr>
-            <th scope="col">Cover</th>
-            <th scope="col">Title</th>
-            <th scope="col">Author</th>
-            <th scope="col">Number of Pages</th>
-            <th scope="col">Publishing Date</th>
+            <th class="cover" scope="col"><span>Cover</span></th>
+            <th class="title" scope="col"><span>Title<i class="demo-icon icon-sort"></i></span></th>
+            <th class="author" scope="col"><span>Author<i class="demo-icon icon-sort"></i></span></th>
+            <th class="numberOfPages numeric" scope="col"><span>Number of Pages<i class="demo-icon icon-sort"></i></span></th>
+            <th class="publishDate" scope="col"><span>Publishing Date</span><i class="demo-icon icon-sort"></i></th>
+            <th class="trashcan"><span>Delete</span></th>
           </tr>
         </thead>
         <tbody id="tableContactBody">
@@ -124,157 +131,14 @@
             <td>Mark</td>
             <td>Otto</td>
             <td>@mdo</td>
-          </tr>
-          <tr>
-            <th scope="row"><img src="" alt=""></th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <th scope="row"><img src="" alt=""></th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
-          <tr>
-            <th scope="row"><img src="" alt=""></th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
-          <tr>
-            <th scope="row"><img src="" alt=""></th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
-          <tr>
-            <th scope="row"><img src="" alt=""></th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
-          <tr>
-            <th scope="row"><img src="" alt=""></th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
-          <tr>
-            <th scope="row"><img src="" alt=""></th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
-          <tr>
-            <th scope="row"><img src="" alt=""></th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
-          <tr>
-            <th scope="row"><img src="" alt=""></th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
-          <tr>
-            <th scope="row"><img src="" alt=""></th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
-          <tr>
-            <th scope="row"><img src="" alt=""></th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
           </tr> -->
         </tbody>
       </table>
-        <!-- <ul class="list-unstyled">
-          <li class="media">
-            <img class="mr-3 book-resize" src="https://vignette.wikia.nocookie.net/stephenking/images/8/84/It_by_Stephen_King_-_Book_Cover_V2.jpg/revision/latest/scale-to-width-down/127?cb=20171008091323" alt="It book cover">
-            <div class="media-body">
-              <h5 class="mt-0 mb-1">IT</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </div>
-          </li>
-          <li class="media my-4">
-            <img class="mr-3 book-resize" src="http://jtenglish.wikispaces.com/file/view/Catcher_in_the_Rye_cover.jpg/32858005/108x143/Catcher_in_the_Rye_cover.jpg" alt="Generic placeholder image">
-            <div class="media-body">
-              <h5 class="mt-0 mb-1">The Catcher in the Rye</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </div>
-          </li>
-          <li class="media">
-            <img class="mr-3 book-resize" src="https://s3-us-west-2.amazonaws.com/tabs.web.media/a/g/ag6l/ag6l-square-175.jpg" alt="Generic placeholder image">
-            <div class="media-body">
-              <h5 class="mt-0 mb-1">The Tommyknockers</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </div>
-          </li>
-          <li class="media">
-            <img class="mr-3" src="" alt="Generic placeholder image">
-            <div class="media-body">
-              <h5 class="mt-0 mb-1">List-based media object</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </div>
-          </li>
-          <li class="media my-4">
-            <img class="mr-3" src="..." alt="Generic placeholder image">
-            <div class="media-body">
-              <h5 class="mt-0 mb-1">List-based media object</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </div>
-          </li>
-          <li class="media">
-            <img class="mr-3" src="..." alt="Generic placeholder image">
-            <div class="media-body">
-              <h5 class="mt-0 mb-1">List-based media object</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </div>
-          </li>
-          <li class="media">
-            <img class="mr-3" src="..." alt="Generic placeholder image">
-            <div class="media-body">
-              <h5 class="mt-0 mb-1">List-based media object</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </div>
-          </li>
-          <li class="media my-4">
-            <img class="mr-3" src="..." alt="Generic placeholder image">
-            <div class="media-body">
-              <h5 class="mt-0 mb-1">List-based media object</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </div>
-          </li>
-          <li class="media">
-            <img class="mr-3" src="..." alt="Generic placeholder image">
-            <div class="media-body">
-              <h5 class="mt-0 mb-1">List-based media object</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </div>
-          </li>
-          <li class="media">
-            <img class="mr-3" src="..." alt="Generic placeholder image">
-            <div class="media-body">
-              <h5 class="mt-0 mb-1">List-based media object</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </div>
-          </li>
-          <li class="media my-4">
-            <img class="mr-3" src="..." alt="Generic placeholder image">
-            <div class="media-body">
-              <h5 class="mt-0 mb-1">List-based media object</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </div>
-          </li>
-          <li class="media">
-            <img class="mr-3" src="..." alt="Generic placeholder image">
-            <div class="media-body">
-              <h5 class="mt-0 mb-1">List-based media object</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </div>
-          </li>
-        </ul> -->
-
       </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="js/jquery.js" charset="utf-8"></script>
+    <script src="js/jquery-ui.js" charset="utf-8"></script>
+    <script src="js/bootstrap.bundle.js" charset="utf-8"></script>
+    <script src="js/javascript.js" charset="utf-8"></script>
   </body>
 </html>
