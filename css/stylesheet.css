@@ -10,13 +10,29 @@
   background-color: rgba(255, 255, 255, .85);
 }
 
-.cover {
-  width: 15%;
+#tableContactBody > tr > td > img {
+  width: 50%;
 }
 
-body > div > div > nav > ul > li.nav-item.dropdown.show > a {
-  width: fit-content;
+.table td {
+  width: 1%;
 }
+
+#tableContactBody > tr:nth-child(1) > td:nth-child(6) {
+  align-content: space-around;
+  width: 1%;
+}
+
+.tiny {
+  width: 5%;
+}
+/* #tableContactBody > tr:nth-child(1) > td:nth-child(6) > img {
+  width: 15%;
+} */
+
+.deleteBook {
+  width: 50%;
+};
 
 input {
   height: 20px;

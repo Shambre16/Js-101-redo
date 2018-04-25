@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/datatables.css">
+    <!-- <link rel="stylesheet" href="css/datatables.css"> -->
     <link rel="stylesheet" href="css/stylesheet.css">
     <link rel="stylesheet" href="css/fontello.css">
     <title>Welcome to My Library!</title>
@@ -20,100 +20,120 @@
     a way to search by title and author -->
     <div class="container-fluid book-background">
       <div class="container opaque-background">
-      <!-- Navigation Bar -->
-        <nav class="nav-fill" style="background-color: #ffffff;">
-          <ul class="nav nav-pills">
-            <li class="nav-item dropdown">
-              <a class="nav-link active dropdown-toggle btn-info" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Create a Library</a>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Add a Single Book by Title</a>
-                <a class="dropdown-item" href="#">Add Multiple Books by Title</a>
-                <button class="dropdown-item" id="buildTableButton" onclick="buildTable();" href="#">Add All Books</button>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Remove a Single Book by Title</a>
-                <a class="dropdown-item" href="#">Remove a Book/s by Author</a>
-              </div>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link active dropdown-toggle btn-info" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Get Books</a>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Get a Single Book by Title</a>
-                <a class="dropdown-item" href="#">Get a Book/s by Author</a>
-              </div>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link active dropdown-toggle btn-info" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">For the Adventurous Type!</a>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Get a Random Book by Title</a>
-                <a class="dropdown-item" href="#">Get a Random Author</a>
-              </div>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link active dropdown-toggle btn-info" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Library Options</a>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">View Featured Authors</a>
-                <a class="dropdown-item" href="#">Save your Library</a>
-                <a class="dropdown-item" href="#">Load a Saved Library</a>
-                <a class="dropdown-item" href="#">Clear your Saved Library</a>
-              </div>
-            </li>
-          </ul>
-        </nav>
       <!-- Jumbotron -->
       <div class="jumbotron jumbotron-fluid">
         <div class="container row">
-          <div class="col-md-6">
+          <div class="col-md-12">
             <h1 class="display-4">Welcome to Your Library!</h1>
             <p class="lead">This library has been created so that you can customize it.</p>
           </div>
-          <div class="col-md-6">
-            <div class="well">
-              <div class="card-deck single-card">
-                <div class="card">
-                  <img class="card-img-top" src="javascript:void(0)" alt="Card image cap">
-                  <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card text-center">
+              <div class="card-header">
+                Add Books Here!
+              </div>
+              <div class="card-body">
+                <!-- <h5 class="card-title">Special title treatment</h5>
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+                <form>
+                  <div class="form-group">
+                    <label for="formGroupExampleInput">Title</label>
+                    <input type="text" class="form-control" id="formWebsiteInput" placeholder="Type Image URL Here">
                   </div>
-                  <div class="card-footer">
-                    <small class="text-muted">Last updated 3 mins ago</small>
+                  <div class="form-group">
+                    <label for="formGroupExampleInput">Title</label>
+                    <input type="text" class="form-control" id="formTitleInput" placeholder="Type Title Here">
                   </div>
-                </div>
-                <!-- <div class="card">
-                  <img class="card-img-top" src="javascript:void(0)" alt="Card image cap">
-                  <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+                  <div class="form-group">
+                    <label for="formGroupExampleInput2">Author</label>
+                    <input type="text" class="form-control" id="formAuthorInput" placeholder="Type Author Name Here">
                   </div>
-                  <div class="card-footer">
-                    <small class="text-muted">Last updated 3 mins ago</small>
+                  <div class="form-group">
+                    <label for="formGroupExampleInput">Number of Pages</label>
+                    <input type="text" class="form-control" id="formNumberOfPagesInput" placeholder="Type Number of Pages Here">
                   </div>
-                </div>
-                <div class="card">
-                  <img class="card-img-top" src="javascript:void(0)" alt="Card image cap">
-                  <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+                  <div class="form-group">
+                    <label for="formGroupExampleInput2">Publish Date</label>
+                    <input type="text" class="form-control" id="formPublishDateInput" placeholder="Type Publication Date Here">
                   </div>
-                  <div class="card-footer">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                  </div>
-                </div> -->
+                </form>
+                <a href="#" class="btn btn-primary" id="addBookBtn">Add a Book</a>
+              </div>
+              <div class="card-footer text-muted">
+                2 days ago
               </div>
             </div>
           </div>
-        <!-- Search bar -->
-          <div>
-            <nav class="navbar navbar-light justify-content-center">
-              <form class="form-inline">
-                <input class="form-control mr-sm-2 searchBox" type="search" placeholder="Search by Title/Author" aria-label="Search">
-                <button class="btn btn-outline-info my-2 my-sm-0 searchButton" type="submit">Search<i class="demo-icon icon-search"></i></button>
-              </form>
-            </nav>
-          </div>
         </div>
       </div>
-      <!-- Booklist -->
+      <!-- Navigation Bar -->
+      <nav class="navbar navbar-light justify-content-center" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter" id="getAuthors">View Featured Authors</button>
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter" id="randomBook" href="#">Get a Random Book by Title</button>
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter" id="randomAuthor" href="#">Get a Random Author</button>
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">All Featured Authors</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <ul class="list-group list-group-flush" id="modalAuthors">
+                  <!-- <li class="list-group-item">Cras justo odio</li>
+                  <li class="list-group-item">Dapibus ac facilisis in</li>
+                  <li class="list-group-item">Morbi leo risus</li>
+                  <li class="list-group-item">Porta ac consectetur ac</li>
+                  <li class="list-group-item">Vestibulum at eros</li> -->
+                </ul>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Recommended Book</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <!-- <div class="modal-body card" style="width: 18rem;" id="randomBookModal"> -->
+                <!-- <div class="card" style="width: 18rem;">
+                  <img class="card-img-top" src="..." alt="Card image cap">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text author-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <p class="card-text numberOfPages-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <p class="card-text publishDate-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                  </div>
+                </div> -->
+              <!-- </div> -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- Search bar -->
+        <div>
+          <nav class="navbar navbar-light justify-content-center">
+            <form class="form-inline">
+              <input class="form-control mr-sm-2" id="searchBox" type="search" placeholder="Search by Title/Author" aria-label="Search">
+              <button class="btn btn-outline-info my-2 my-sm-0" id="searchButton" type="submit">Search<i class="demo-icon icon-search"></i></button>
+            </form>
+          </nav>
+        </div>
       <table class="table table-hover table-info">
         <thead>
           <tr>
@@ -121,7 +141,7 @@
             <th class="title" scope="col"><span>Title<i class="demo-icon icon-sort"></i></span></th>
             <th class="author" scope="col"><span>Author<i class="demo-icon icon-sort"></i></span></th>
             <th class="numberOfPages numeric" scope="col"><span>Number of Pages<i class="demo-icon icon-sort"></i></span></th>
-            <th class="publishDate" scope="col"><span>Publishing Date</span><i class="demo-icon icon-sort"></i></th>
+            <th class="publishDate" scope="col"><span>Publication Date</span><i class="demo-icon icon-sort"></i></th>
             <th class="trashcan"><span>Delete</span></th>
           </tr>
         </thead>
@@ -137,7 +157,8 @@
       </div>
     </div>
     <script src="js/jquery.js" charset="utf-8"></script>
-    <script src="js/jquery-ui.js" charset="utf-8"></script>
+    <script src="js/jquery.tablesorter.js" charset="utf-8"></script>
+    <!-- <script src="js/jquery-ui.js" charset="utf-8"></script> -->
     <script src="js/bootstrap.bundle.js" charset="utf-8"></script>
     <script src="js/javascript.js" charset="utf-8"></script>
   </body>
