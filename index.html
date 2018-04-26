@@ -61,7 +61,7 @@
                     <input type="text" class="form-control" id="formPublishDateInput" placeholder="Type Publication Date Here">
                   </div>
                 </form>
-                <a href="#" class="btn btn-primary" id="addBookBtn">Add a Book</a>
+                <a href="javascript:void(0)" class="btn btn-info" id="addBookBtn">Add a Book</a>
               </div>
               <div class="card-footer text-muted">
                 <button type="button" class="btn btn-light">Add Another Book</button>
@@ -83,14 +83,9 @@
                   <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-              <ul class="list-group list-group-flush" id="modalAuthors">
-                <!-- <li class="list-group-item">Cras justo odio</li>
-                  <li class="list-group-item">Dapibus ac facilisis in</li>
-                  <li class="list-group-item">Morbi leo risus</li>
-                  <li class="list-group-item">Porta ac consectetur ac</li>
-                  <li class="list-group-item">Vestibulum at eros</li> -->
-              </ul>
+            <div class="modal-body" id="modalAuthors">
+              <p class="list-group list-group-flush">
+              </p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -99,27 +94,22 @@
         </div>
       </div>
       <!-- <div class="dropdown-menu p-4 text-muted" style="max-width: 200px;"> -->
-        <button type="button" class="btn btn-info" id="randomBook" href="#">Get a Random Book by Title</button>
-          <div class="modal-body card" style="width: 18rem;">
-            <div class="card" id="randomBookModal" style="width: 18rem;">
-              <img class="card-img-top" src="..." alt="Card image cap">
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text author-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <p class="card-text numberOfPages-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <p class="card-text publishDate-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              </div>
+      <div class="btn-group dropright">
+        <button type="button" id="randomBook" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Get a Random Book by Title
+        </button>
+        <div class="dropdown-menu">
+          <div class="card" id="randomBookModal" style="width: 18rem;">
+            <img class="card-img-top" src="..." alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text author-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <p class="card-text numberOfPages-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <p class="card-text publishDate-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
             </div>
           </div>
-        <p>
-          Some example text that's free-flowing within the dropdown menu.
-        </p>
-        <p class="mb-0">
-          And this is more example text.
-        </p>
-      <!-- </div> -->
-      </nav>
+        </div>
+      </div>
       <!-- Search bar -->
       <div>
         <nav class="navbar navbar-light justify-content-center">
@@ -141,9 +131,6 @@
           </tr>
         </thead>
         <tbody id="tableContactBody">
-          <tr id="deleteRow">
-
-          </tr>
         </tbody>
       </table>
     </div>

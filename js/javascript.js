@@ -35,6 +35,7 @@ Library.prototype.init = function() {
   this.$formNumberOfPagesInput = $("#formNumberOfPagesInput");
   this.$formPublishDateInput = $("#formPublishDateInput");
   this.$deleteBookBtn = $("button.deleteBook");
+
   //Put all the things in here for added performance to it
   // this.$alertBtn = $("button.alert");
   // this.$changeBtn = $("button.change-text");
@@ -56,7 +57,7 @@ Library.prototype._bindEvents = function() {
   this.$randomBookBtn.on("click", $.proxy(this._handleRandomBook, this));
   this.$randomAuthorBtn.on("click", $.proxy(this._handleRandomAuthor, this));
   this.$getAuthorsBtn.on("click", $.proxy(this._handleGetAuthors, this));
-  this.$deleteBookBtn.on("click", $.proxy(this._handleDelete, this));
+  this.$deleteBookBtn.on("click", "delete", $.proxy(this._handleDelete, this));
 
   return false;
 };
@@ -72,13 +73,10 @@ Library.prototype._handleAddBook = function() {
   newBook["trashcan"] = bookObjectInput[5];
   this.addBook(newBook);
 };
-// this.addBook(new Book(book));
 
-Library.prototype._handleDelete = function() {
-  var $tr = this.$deleteBookBtn.parent().remove();
-  // this.myBooksArray.splice($tr.attr("data-id"), 1);
-  // $tr.remove();
-  // alert($tr);
+Library.prototype._handleDelete = function(e) {
+  alert("yay");
+  $(e.currentTarget).parent().parent().remove();
 };
 
 Library.prototype._handleUpdateLibrary = function() {
@@ -98,19 +96,21 @@ Library.prototype._handleRandomBook = function() {
 
 Library.prototype._handleRandomAuthor = function() {
   alert(this.getRandomAuthorName());
+  // $("#randomBookModal").append(this.getRandomAuthorName());
 };
 
 Library.prototype._handleGetAuthors = function() {
   var authorList = this.getAuthors();
   var authorListInput = "";
   for (var i = 0; i < authorList.length; i++) {
-    authorListInput = authorListInput + "<li class=\"list-group-item\">" + authorList[i] + "</li>"
+    authorListInput = authorListInput + "<li class=\"list-group-item\">" + authorList[i] + "</li>";
   }
   $(".list-group-item").remove();
   $("#modalAuthors").after(authorListInput);
 };
 
 Library.prototype._handleSearch = function() {
+  alert("yay!");
   var searchResults = document.getElementById("searchBox").value;
   var arrayResult = this.search(searchResults);
   this._buildTable(arrayResult);
@@ -145,8 +145,8 @@ Library.prototype._buildTable = function(books) {
     var book = books[i];
     this.addLineToHTMLTable(book.cover, book.title, book.author, book.numberOfPages, book.publishDate, book.trashcan);
   }
+
   this.$deleteBookBtn = $("button.deleteBook");
-  this._bindEvents();
 
 };
 
@@ -155,135 +155,119 @@ $(document).ready(function() { //Listen to the document and when you hear this, 
   window.gLib = new Library("localLibraryStorage");
   var gLib = window.gLib;
   gLib.init(); //I want this to fire off all the things I want it to do right away --> Set up bind events
-  var gIT = new Book({
-    cover: "https://upload.wikimedia.org/wikipedia/en/5/5a/It_cover.jpg",
-    title: "IT",
-    author: "Stephen King",
-    numberOfPages: 1138,
-    publishDate: "September 15, 1986",
-    trashcan: "<tr></tr>"
-  });
-  // The below just allows me to test that even if I call another instance, it will be the same as the first one I created
-  var gIT2 = new Book({
-    cover: "https://upload.wikimedia.org/wikipedia/en/5/5a/It_cover.jpg",
-    title: "IT",
-    author: "Stephen King",
-    numberOfPages: 800,
-    publishDate: "December 17, 1995",
-    trashcan: ""
-  });
-  var gCatcherInTheRye = new Book({
-    cover: "https://upload.wikimedia.org/wikipedia/en/thumb/3/32/Rye_catcher.jpg/220px-Rye_catcher.jpg",
-    title: "The Catcher in the Rye",
-    author: "JD Salinger",
-    numberOfPages: 214,
-    publishDate: "July 16, 1951",
-    trashcan: ""
-  });
-  var gWrinkleInTime = new Book({
-    cover: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0b/WrinkleInTimePBA1.jpg/220px-WrinkleInTimePBA1.jpg",
-    title: "A Wrinkle in Time",
-    author: "Madeleine L'Engle",
-    numberOfPages: 180,
-    publishDate: "January 1, 1962",
-    trashcan: ""
-  });
-  var gMistsOfAvalon = new Book({
-    cover: "https://upload.wikimedia.org/wikipedia/en/thumb/3/37/Mists_of_Avalon-1st_ed.jpg/220px-Mists_of_Avalon-1st_ed.jpg",
-    title: "Mists of Avalon",
-    author: "Marion Zimmer Bradley",
-    numberOfPages: 876,
-    publishDate: "January 1, 1985",
-    trashcan: ""
-  });
-  var gTheyAllSawACat = new Book({
-    cover: "https://images-na.ssl-images-amazon.com/images/I/41Qo1cquOSL._AC_US218_.jpg",
-    title: "They All Saw a Cat",
-    author: "Brendan Wenzel",
-    numberOfPages: 44,
-    publishDate: "August 30, 2016",
-    trashcan: ""
-  });
-  var gTheBigRedBarn = new Book({
-    cover: "https://tse2.mm.bing.net/th?id=OIP.JuibDYXLkb-5S6UaoskR4QHaIl&pid=Api",
-    title: "The Big Red Barn",
-    author: "Margaret Wise Brown",
-    numberOfPages: 32,
-    publishDate: "January 06, 1995",
-    trashcan: ""
-  });
-  var gInterpreterOfMaladies = new Book({
-    cover: "https://tse1.mm.bing.net/th?id=OIP.1C8YsAp4P4w5a9eJpGcQUAHaLJ&pid=Api",
-    title: "Interpreter of Maladies",
-    author: "Jhumpa Lahiri",
-    numberOfPages: 198,
-    publishDate: "January 11, 2013",
-    trashcan: ""
-  });
-  var gUnaccustomedEarth = new Book({
-    cover: "https://upload.wikimedia.org/wikipedia/en/thumb/b/b9/Unaccustomed_Earth.jpg/220px-Unaccustomed_Earth.jpg",
-    title: "Unaccustomed Earth",
-    author: "Jhumpa Lahiri",
-    numberOfPages: 331,
-    publishDate: "April 13, 2008",
-    trashcan: ""
-  });
-  var gTommyknockers = new Book({
-    cover: "https://upload.wikimedia.org/wikipedia/en/5/55/Tommyknockers.jpg",
-    title: "Tommyknockers",
-    author: "Stephen King",
-    numberOfPages: 900,
-    publishDate: "October 10, 1964",
-    trashcan: ""
-  });
-  var gStephanie = new Book({
-    cover: "https://i.pinimg.com/originals/5a/25/e3/5a25e329f31e119e1b826d421c9513af.jpg",
-    title: "Stephanie's Ponytail",
-    author: "Robert Munsch",
-    numberOfPages: 24,
-    publishDate: "May 17, 2014",
-    trashcan: ""
-  });
-  var gTheVelveteenRabbit = new Book({
-    cover: "http://media-cache-ak0.pinimg.com/736x/33/85/ec/3385ec4f38046a3ff35c3a280786dcff.jpg",
-    title: "The Velveteen Rabbit",
-    author: "Margery Williams",
-    numberOfPages: 50,
-    publishDate: "May 16, 1922",
-    trashcan: ""
-  });
-  var gDreamNovel = new Book({
-    cover: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Traumnovelle-Titelbild.gif/440px-Traumnovelle-Titelbild.gif",
-    title: "Dream Novel (Traumnovelle)",
-    author: "Arthur Schnitzler",
-    numberOfPages: 128,
-    publishDate: "April 24, 1968",
-    trashcan: ""
-  });
-  //AllBookInstances
-  window.gAllBooks = [gIT, gIT2, gCatcherInTheRye, gWrinkleInTime, gMistsOfAvalon, gTheyAllSawACat, gTheBigRedBarn, gInterpreterOfMaladies, gUnaccustomedEarth, gTommyknockers, gStephanie, gTheVelveteenRabbit, gDreamNovel];
-  // Run code
   gLib.getObject("localLibraryStorage");
   $(".table").tablesort();
 });
-// var tableBody = $('#tableContactBody').DataTable(){ for DataTables example
-//   data: gLib.myBooksArray,
-//   columns: [{
-//     data: "",
-//     data: "title",
-//     data: "author",
-//     data: "numberOfPages",
-//     data: "publishDate",
-//     data: ""
-//   }]
-// }
 
-// buildData();
-// $("th").each(function(i) {
-//   var header = $(this);
-//   header.data();
-// });
+var gIT = new Book({
+  cover: "https://upload.wikimedia.org/wikipedia/en/5/5a/It_cover.jpg",
+  title: "IT",
+  author: "Stephen King",
+  numberOfPages: 1138,
+  publishDate: "September 15, 1986",
+  trashcan: "<tr></tr>"
+});
+// The below just allows me to test that even if I call another instance, it will be the same as the first one I created
+var gIT2 = new Book({
+  cover: "https://upload.wikimedia.org/wikipedia/en/5/5a/It_cover.jpg",
+  title: "IT",
+  author: "Stephen King",
+  numberOfPages: 800,
+  publishDate: "December 17, 1995",
+  trashcan: ""
+});
+var gCatcherInTheRye = new Book({
+  cover: "https://upload.wikimedia.org/wikipedia/en/thumb/3/32/Rye_catcher.jpg/220px-Rye_catcher.jpg",
+  title: "The Catcher in the Rye",
+  author: "JD Salinger",
+  numberOfPages: 214,
+  publishDate: "July 16, 1951",
+  trashcan: ""
+});
+var gWrinkleInTime = new Book({
+  cover: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0b/WrinkleInTimePBA1.jpg/220px-WrinkleInTimePBA1.jpg",
+  title: "A Wrinkle in Time",
+  author: "Madeleine L'Engle",
+  numberOfPages: 180,
+  publishDate: "January 1, 1962",
+  trashcan: ""
+});
+var gMistsOfAvalon = new Book({
+  cover: "https://upload.wikimedia.org/wikipedia/en/thumb/3/37/Mists_of_Avalon-1st_ed.jpg/220px-Mists_of_Avalon-1st_ed.jpg",
+  title: "Mists of Avalon",
+  author: "Marion Zimmer Bradley",
+  numberOfPages: 876,
+  publishDate: "January 1, 1985",
+  trashcan: ""
+});
+var gTheyAllSawACat = new Book({
+  cover: "https://images-na.ssl-images-amazon.com/images/I/41Qo1cquOSL._AC_US218_.jpg",
+  title: "They All Saw a Cat",
+  author: "Brendan Wenzel",
+  numberOfPages: 44,
+  publishDate: "August 30, 2016",
+  trashcan: ""
+});
+var gTheBigRedBarn = new Book({
+  cover: "https://tse2.mm.bing.net/th?id=OIP.JuibDYXLkb-5S6UaoskR4QHaIl&pid=Api",
+  title: "The Big Red Barn",
+  author: "Margaret Wise Brown",
+  numberOfPages: 32,
+  publishDate: "January 06, 1995",
+  trashcan: ""
+});
+var gInterpreterOfMaladies = new Book({
+  cover: "https://tse1.mm.bing.net/th?id=OIP.1C8YsAp4P4w5a9eJpGcQUAHaLJ&pid=Api",
+  title: "Interpreter of Maladies",
+  author: "Jhumpa Lahiri",
+  numberOfPages: 198,
+  publishDate: "January 11, 2013",
+  trashcan: ""
+});
+var gUnaccustomedEarth = new Book({
+  cover: "https://upload.wikimedia.org/wikipedia/en/thumb/b/b9/Unaccustomed_Earth.jpg/220px-Unaccustomed_Earth.jpg",
+  title: "Unaccustomed Earth",
+  author: "Jhumpa Lahiri",
+  numberOfPages: 331,
+  publishDate: "April 13, 2008",
+  trashcan: ""
+});
+var gTommyknockers = new Book({
+  cover: "https://upload.wikimedia.org/wikipedia/en/5/55/Tommyknockers.jpg",
+  title: "Tommyknockers",
+  author: "Stephen King",
+  numberOfPages: 900,
+  publishDate: "October 10, 1964",
+  trashcan: ""
+});
+var gStephanie = new Book({
+  cover: "https://i.pinimg.com/originals/5a/25/e3/5a25e329f31e119e1b826d421c9513af.jpg",
+  title: "Stephanie's Ponytail",
+  author: "Robert Munsch",
+  numberOfPages: 24,
+  publishDate: "May 17, 2014",
+  trashcan: ""
+});
+var gTheVelveteenRabbit = new Book({
+  cover: "http://media-cache-ak0.pinimg.com/736x/33/85/ec/3385ec4f38046a3ff35c3a280786dcff.jpg",
+  title: "The Velveteen Rabbit",
+  author: "Margery Williams",
+  numberOfPages: 50,
+  publishDate: "May 16, 1922",
+  trashcan: ""
+});
+var gDreamNovel = new Book({
+  cover: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Traumnovelle-Titelbild.gif/440px-Traumnovelle-Titelbild.gif",
+  title: "Dream Novel (Traumnovelle)",
+  author: "Arthur Schnitzler",
+  numberOfPages: 128,
+  publishDate: "April 24, 1968",
+  trashcan: ""
+});
 
+//AllBookInstances
+window.gAllBooks = [gIT, gIT2, gCatcherInTheRye, gWrinkleInTime, gMistsOfAvalon, gTheyAllSawACat, gTheBigRedBarn, gInterpreterOfMaladies, gUnaccustomedEarth, gTommyknockers, gStephanie, gTheVelveteenRabbit, gDreamNovel];
+// Run code
 
 Library.prototype.addBook = function(book) {
   // if (book.constructor === Array) {
@@ -408,6 +392,6 @@ Library.prototype.updateLibrary = function() {
   $("body").trigger("updateLibrary");
 };
 
-Book.prototype.fullYear = function() {
-  return this.publishDate.getYear();
-};
+// Book.prototype.fullYear = function() {
+//   return this.publishDate.getYear();
+// };
