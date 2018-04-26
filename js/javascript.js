@@ -58,12 +58,6 @@ Library.prototype._bindEvents = function() {
   this.$getAuthorsBtn.on("click", $.proxy(this._handleGetAuthors, this));
   this.$deleteBookBtn.on("click", $.proxy(this._handleDelete, this));
 
-
-  // var self = this;
-  // this.$btn.on("click", function(){this._buildtable(self)});
-  // this.$alertBtn.on("click", $.proxy(this._handleAlert, this)); //function(){}); //first and third this refer to same thing, this in here will refer to whatever I'm clicking off in this event, proxy replaces function and allows us to fill it in
-  // this.$changeBtn.on("click", $.proxy(this._handleText, this));
-  // this.$logBtn.on("click", $.proxy(this._handleLog, this));
   return false;
 };
 
@@ -81,29 +75,29 @@ Library.prototype._handleAddBook = function() {
 // this.addBook(new Book(book));
 
 Library.prototype._handleDelete = function() {
-  // var $tr = $(e.currentTarget).parent("tr");
+  var $tr = this.$deleteBookBtn.parent().remove();
   // this.myBooksArray.splice($tr.attr("data-id"), 1);
   // $tr.remove();
-  alert("I work!!");
+  // alert($tr);
 };
 
 Library.prototype._handleUpdateLibrary = function() {
-  this.buildTable(this.myBooksArray);
+  this._buildTable(this.myBooksArray);
 };
 
 Library.prototype._handleRandomBook = function() {
   var bookObject = this.getRandomBook();
-  console.log(bookObject);
+  // console.log(bookObject);
   $(".card-img-top").attr("src", bookObject.cover);
   $(".card-title").text(bookObject.title);
   $(".author-paragraph").text(bookObject.author);
   $(".numberOfPages-paragraph").text(bookObject.numberOfPages);
   $(".publishDate-paragraph").text(bookObject.publishDate);
+  // $("#randomBookModal").show()
 };
 
 Library.prototype._handleRandomAuthor = function() {
-  console.log(this.getRandomAuthorName());
-  this.getRandomAuthorName();
+  alert(this.getRandomAuthorName());
 };
 
 Library.prototype._handleGetAuthors = function() {
@@ -112,14 +106,14 @@ Library.prototype._handleGetAuthors = function() {
   for (var i = 0; i < authorList.length; i++) {
     authorListInput = authorListInput + "<li class=\"list-group-item\">" + authorList[i] + "</li>"
   }
-  $("#modalAuthors").empty();
+  $(".list-group-item").remove();
   $("#modalAuthors").after(authorListInput);
 };
 
 Library.prototype._handleSearch = function() {
   var searchResults = document.getElementById("searchBox").value;
   var arrayResult = this.search(searchResults);
-  this.buildTable(arrayResult);
+  this._buildTable(arrayResult);
 };
 
 // Add a line to the HTML table
@@ -141,11 +135,11 @@ Library.prototype.addLineToHTMLTable = function(cover, title, author, numberOfPa
   publishDateCell.innerHTML = publishDate;
   var trashcanCell = newRow.insertCell();
   trashcanCell.innerHTML = "<button class='btn btn-info deleteBook'>X</button>";
-  // var cell = $(trashcanCell).data("title", title);
+  // var trashcanCell = $(trashcanCell).data("title", title);
   // cell.on("click", $.proxy(this._handleDelete, this));
 };
 
-Library.prototype.buildTable = function(books) {
+Library.prototype._buildTable = function(books) {
   $("#tableContactBody").empty();
   for (var i = 0; i < books.length; i++) {
     var book = books[i];
@@ -154,42 +148,7 @@ Library.prototype.buildTable = function(books) {
   this.$deleteBookBtn = $("button.deleteBook");
   this._bindEvents();
 
-  // $("#tableContactBody").full();
-  // for (var i = 0; i < searchResults.length; i++) {
-  //   var book = searchResults[i];
-  //   addLineToHTMLTable(book.cover, book.title, book.author, book.numberOfPages, book.publishDate, book.trashcan);
-  // }
 };
-
-// function addCover() {
-//   var x = document.createElement("IMG");
-//   x.setAttribute("src", "https://upload.wikimedia.org/wikipedia/en/5/5a/It_cover.jpg");
-//   x.setAttribute("width", "304");
-//   x.setAttribute("height", "228");
-//   x.setAttribute("alt", "IT book cover");
-//   document.body.appendChild(x);
-// }
-//
-// Library.prototype._addLinetoHTMLTable = function (title, author, numberOfPages, publishDate, trashcan) {
-//   var tableBody = document.querySelector("#tableContactBody");
-//
-//   var newRow = tableBody.insertRow();
-//
-//   var titleCell = newRow.insertCell();
-//   titleCell.innerHTML = title;
-//
-//   var authorCell = newRow.insertCell();
-//   authorCell.innerHTML = author;
-//
-//   var numberOfPagesCell = newRow.insertCell();
-//   numberOfPagesCell.innerHTML = numberOfPages;
-//
-//   var publishDateCell = newRow.insertCell();
-//   publishDateCell.innerHTML = publishDate;
-//
-//   var trashcan = newRow.insertCell();
-//   trashcanCell.innerHTML = "trashcan";
-// };
 
 //Library Instance:
 $(document).ready(function() { //Listen to the document and when you hear this, fire this off
@@ -202,7 +161,7 @@ $(document).ready(function() { //Listen to the document and when you hear this, 
     author: "Stephen King",
     numberOfPages: 1138,
     publishDate: "September 15, 1986",
-    trashcan: ""
+    trashcan: "<tr></tr>"
   });
   // The below just allows me to test that even if I call another instance, it will be the same as the first one I created
   var gIT2 = new Book({
@@ -369,6 +328,7 @@ Library.prototype.getRandomBook = function() {
   } else {
     return this.myBooksArray[(Math.floor(Math.random() * this.myBooksArray.length))];
   }
+  return true;
 };
 
 Library.prototype.getBookByTitle = function(title) {

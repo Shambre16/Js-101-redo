@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <!-- <link rel="stylesheet" href="css/datatables.css"> -->
-    <link rel="stylesheet" href="css/stylesheet.css">
-    <link rel="stylesheet" href="css/fontello.css">
-    <title>Welcome to My Library!</title>
-  </head>
-  <body>
-    <!-- <button type="button" name="button" class="alert">OnClick Alert Me</button>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <!-- <link rel="stylesheet" href="css/datatables.css"> -->
+  <link rel="stylesheet" href="css/stylesheet.css">
+  <link rel="stylesheet" href="css/fontello.css">
+  <title>Welcome to My Library!</title>
+</head>
+
+<body>
+  <!-- <button type="button" name="button" class="alert">OnClick Alert Me</button>
     <button type="button" name="button" class="change-text">OnClick Change Text</button>
     <button type="button" name="button" class="log-hello">OnClick Console Log Hello!</button> -->
 
-    <!-- A display area for your library (a bootstrap table with rows for each book),
+  <!-- A display area for your library (a bootstrap table with rows for each book),
     a way to delete that book from the table,
     a way to pull back random books in a “well” somewhere on the UI,
     a way to search by title and author -->
-    <div class="container-fluid book-background">
-      <div class="container opaque-background">
+  <div class="container-fluid book-background">
+    <div class="container opaque-background">
       <!-- Jumbotron -->
       <div class="jumbotron jumbotron-fluid">
         <div class="container row">
@@ -62,7 +64,7 @@
                 <a href="#" class="btn btn-primary" id="addBookBtn">Add a Book</a>
               </div>
               <div class="card-footer text-muted">
-                2 days ago
+                <button type="button" class="btn btn-light">Add Another Book</button>
               </div>
             </div>
           </div>
@@ -70,70 +72,63 @@
       </div>
       <!-- Navigation Bar -->
       <nav class="navbar navbar-light justify-content-center" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter" id="getAuthors">View Featured Authors</button>
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter" id="randomBook" href="#">Get a Random Book by Title</button>
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter" id="randomAuthor" href="#">Get a Random Author</button>
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">All Featured Authors</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter" id="getAuthors">View Featured Authors</button>
+      <button type="button" class="btn btn-info" id="randomAuthor" href="#">Get a Random Author</button>
+      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">All Featured Authors</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
-              </div>
-              <div class="modal-body">
-                <ul class="list-group list-group-flush" id="modalAuthors">
-                  <!-- <li class="list-group-item">Cras justo odio</li>
+            </div>
+            <div class="modal-body">
+              <ul class="list-group list-group-flush" id="modalAuthors">
+                <!-- <li class="list-group-item">Cras justo odio</li>
                   <li class="list-group-item">Dapibus ac facilisis in</li>
                   <li class="list-group-item">Morbi leo risus</li>
                   <li class="list-group-item">Porta ac consectetur ac</li>
                   <li class="list-group-item">Vestibulum at eros</li> -->
-                </ul>
-              </div>
-              <div class="modal-footer">
+              </ul>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="dropdown-menu p-4 text-muted" style="max-width: 200px;"> -->
+        <button type="button" class="btn btn-info" id="randomBook" href="#">Get a Random Book by Title</button>
+          <div class="modal-body card" style="width: 18rem;">
+            <div class="card" id="randomBookModal" style="width: 18rem;">
+              <img class="card-img-top" src="..." alt="Card image cap">
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text author-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <p class="card-text numberOfPages-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <p class="card-text publishDate-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               </div>
             </div>
           </div>
-        </div>
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Recommended Book</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <!-- <div class="modal-body card" style="width: 18rem;" id="randomBookModal"> -->
-                <!-- <div class="card" style="width: 18rem;">
-                  <img class="card-img-top" src="..." alt="Card image cap">
-                  <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text author-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <p class="card-text numberOfPages-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <p class="card-text publishDate-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                  </div>
-                </div> -->
-              <!-- </div> -->
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <p>
+          Some example text that's free-flowing within the dropdown menu.
+        </p>
+        <p class="mb-0">
+          And this is more example text.
+        </p>
+      <!-- </div> -->
       </nav>
       <!-- Search bar -->
-        <div>
-          <nav class="navbar navbar-light justify-content-center">
-            <form class="form-inline">
-              <input class="form-control mr-sm-2" id="searchBox" type="search" placeholder="Search by Title/Author" aria-label="Search">
-              <button class="btn btn-outline-info my-2 my-sm-0" id="searchButton" type="submit">Search<i class="demo-icon icon-search"></i></button>
-            </form>
-          </nav>
-        </div>
+      <div>
+        <nav class="navbar navbar-light justify-content-center">
+          <form class="form-inline">
+            <input class="form-control mr-sm-2" id="searchBox" type="search" placeholder="Search by Title/Author" aria-label="Search">
+            <button class="btn btn-outline-info my-2 my-sm-0" id="searchButton" type="submit">Search<i class="demo-icon icon-search"></i></button>
+          </form>
+        </nav>
+      </div>
       <table class="table table-hover table-info">
         <thead>
           <tr>
@@ -146,20 +141,18 @@
           </tr>
         </thead>
         <tbody id="tableContactBody">
-          <!-- <tr>
-          <th scope="row"><img src="" alt=""></th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr> -->
+          <tr id="deleteRow">
+
+          </tr>
         </tbody>
       </table>
-      </div>
     </div>
-    <script src="js/jquery.js" charset="utf-8"></script>
-    <script src="js/jquery.tablesorter.js" charset="utf-8"></script>
-    <!-- <script src="js/jquery-ui.js" charset="utf-8"></script> -->
-    <script src="js/bootstrap.bundle.js" charset="utf-8"></script>
-    <script src="js/javascript.js" charset="utf-8"></script>
-  </body>
+  </div>
+  <script src="js/jquery.js" charset="utf-8"></script>
+  <script src="js/jquery.tablesorter.js" charset="utf-8"></script>
+  <script src="js/jquery-ui.js" charset="utf-8"></script>
+  <script src="js/bootstrap.bundle.js" charset="utf-8"></script>
+  <script src="js/javascript.js" charset="utf-8"></script>
+</body>
+
 </html>
