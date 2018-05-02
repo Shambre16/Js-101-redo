@@ -3,14 +3,13 @@
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  /* Maybe mess with the hsla to get background to be less noisy */
 }
 
 .opaque-background {
   background-color: rgba(255, 255, 255, .85);
 }
 
-#tableContactBody > tr > td > img {
+tr > td > img {
   width: 50%;
 }
 
@@ -18,18 +17,15 @@
   width: 1%;
 }
 
-#tableContactBody > tr:nth-child(1) > td:nth-child(6) {
-  align-content: space-around;
-  width: 1%;
-}
-
-.tiny {
-  width: 5%;
-}
-/* #tableContactBody > tr:nth-child(1) > td:nth-child(6) > img {
-  width: 15%;
-} */
-
 .deleteBook {
   width: 50%;
-};
+}
+
+.decorative-border {
+  border: solid 3px gray;
+  padding: .5em;
+}
+
+.form-group {
+  padding: .25em;
+}

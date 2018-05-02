@@ -5,28 +5,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="css/bootstrap.css">
-  <!-- <link rel="stylesheet" href="css/datatables.css"> -->
   <link rel="stylesheet" href="css/stylesheet.css">
   <link rel="stylesheet" href="css/fontello.css">
   <title>Welcome to My Library!</title>
 </head>
 
 <body>
-  <!-- <button type="button" name="button" class="alert">OnClick Alert Me</button>
-    <button type="button" name="button" class="change-text">OnClick Change Text</button>
-    <button type="button" name="button" class="log-hello">OnClick Console Log Hello!</button> -->
-
-  <!-- A display area for your library (a bootstrap table with rows for each book),
-    a way to delete that book from the table,
-    a way to pull back random books in a “well” somewhere on the UI,
-    a way to search by title and author -->
   <div class="container-fluid book-background">
     <div class="container opaque-background">
       <!-- Jumbotron -->
       <div class="jumbotron jumbotron-fluid">
         <div class="container row">
-          <div class="col-md-12">
-            <h1 class="display-4">Welcome to Your Library!</h1>
+          <div class="col-md-12 text-center">
+            <h1 class="display-4 text-bold">Welcome to Your Library!</h1>
             <p class="lead">This library has been created so that you can customize it.</p>
           </div>
         </div>
@@ -34,37 +25,35 @@
           <div class="col-md-12">
             <div class="card text-center">
               <div class="card-header">
-                Add Books Here!
+                Add One or More Books Here!
               </div>
-              <div class="card-body">
-                <!-- <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
-                <form>
-                  <div class="form-group">
-                    <label for="formGroupExampleInput">Title</label>
-                    <input type="text" class="form-control" id="formWebsiteInput" placeholder="Type Image URL Here">
-                  </div>
-                  <div class="form-group">
-                    <label for="formGroupExampleInput">Title</label>
-                    <input type="text" class="form-control" id="formTitleInput" placeholder="Type Title Here">
-                  </div>
-                  <div class="form-group">
-                    <label for="formGroupExampleInput2">Author</label>
-                    <input type="text" class="form-control" id="formAuthorInput" placeholder="Type Author Name Here">
-                  </div>
-                  <div class="form-group">
-                    <label for="formGroupExampleInput">Number of Pages</label>
-                    <input type="text" class="form-control" id="formNumberOfPagesInput" placeholder="Type Number of Pages Here">
-                  </div>
-                  <div class="form-group">
-                    <label for="formGroupExampleInput2">Publish Date</label>
-                    <input type="text" class="form-control" id="formPublishDateInput" placeholder="Type Publication Date Here">
-                  </div>
-                </form>
-                <a href="javascript:void(0)" class="btn btn-info" id="addBookBtn">Add a Book</a>
-              </div>
-              <div class="card-footer text-muted">
-                <button type="button" class="btn btn-light">Add Another Book</button>
+              <div class="card-body" id="additionalForm">
+                <div class="form-div form-inline">
+                  <form class="decorative-border">
+                    <div class="form-group justify-items-center">
+                      <label for="formGroupExampleInput">Cover Image URL</label>
+                      <input type="text" class="form-control formWebsiteInput" placeholder="Type Image URL Here">
+                    </div>
+                    <div class="form-group">
+                      <label for="formGroupExampleInput">Title</label>
+                      <input type="text" class="form-control formTitleInput" placeholder="Type Title Here">
+                    </div>
+                    <div class="form-group">
+                      <label for="formGroupExampleInput2">Author</label>
+                      <input type="text" class="form-control formAuthorInput" placeholder="Type Author Name Here">
+                    </div>
+                    <div class="form-group">
+                      <label for="formGroupExampleInput">Number of Pages</label>
+                      <input type="text" class="form-control formNumberOfPagesInput" placeholder="Type Number of Pages Here">
+                    </div>
+                    <div class="form-group">
+                      <label for="formGroupExampleInput2">Publish Date</label>
+                      <input type="date" class="form-control formPublishDateInput" placeholder="Type Publication Date Here">
+                    </div>
+                  </form>
+                </div>
+                <button type="button" class="btn btn-light" id="addAnotherBookBtn">Create a New Form for Adding Multiple Books</button>
+                <button class="btn btn-info" id="addBookBtn">Add your Book/s!</button>
               </div>
             </div>
           </div>
@@ -72,44 +61,84 @@
       </div>
       <!-- Navigation Bar -->
       <nav class="navbar navbar-light justify-content-center" role="group" aria-label="Basic example">
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter" id="getAuthors">View Featured Authors</button>
-      <button type="button" class="btn btn-info" id="randomAuthor" href="#">Get a Random Author</button>
-      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">All Featured Authors</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <!--Author List Button trigger modal -->
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#authorListModal" id="getAuthors">
+          View Featured Authors
+        </button>
+        <!-- Author List Modal -->
+        <div class="modal fade" id="authorListModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">All Featured Authors</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                <div class="list-group list-group-flush" id="modalAuthors">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Random Author Button trigger modal -->
+        <button type="button" class="btn btn-info" id="randomAuthor" data-toggle="modal" data-target="#randomAuthorModal">
+          Get a Random Author
+        </button>
+        <!-- Random Author Display Modal -->
+        <div class="modal fade" id="randomAuthorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">We Recommend Checking Out this Author's Work:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
-            </div>
-            <div class="modal-body" id="modalAuthors">
-              <p class="list-group list-group-flush">
-              </p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+              <div class="modal-body author">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <!-- <div class="dropdown-menu p-4 text-muted" style="max-width: 200px;"> -->
-      <div class="btn-group dropright">
-        <button type="button" id="randomBook" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <!-- Random Author Button trigger modal -->
+        <button type="button" class="btn btn-info" id="randomBook" data-toggle="modal" data-target="#randomBookModalCard">
           Get a Random Book by Title
         </button>
-        <div class="dropdown-menu">
-          <div class="card" id="randomBookModal" style="width: 18rem;">
-            <img class="card-img-top" src="..." alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text author-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <p class="card-text numberOfPages-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <p class="card-text publishDate-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <!-- Random Author Modal -->
+        <div class="modal fade" id="randomBookModalCard" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">We Recommend the Following Title:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body book">
+                <div class="card" id="randomBookModal" style="width: 18rem;">
+                  <img class="card-img-top" src="" alt="Card image cap">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text author-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <p class="card-text numberOfPages-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <p class="card-text publishDate-paragraph">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </nav>
       <!-- Search bar -->
       <div>
         <nav class="navbar navbar-light justify-content-center">
@@ -119,15 +148,16 @@
           </form>
         </nav>
       </div>
+      <!-- Book Table -->
       <table class="table table-hover table-info">
         <thead>
           <tr>
-            <th class="cover" scope="col"><span>Cover</span></th>
-            <th class="title" scope="col"><span>Title<i class="demo-icon icon-sort"></i></span></th>
-            <th class="author" scope="col"><span>Author<i class="demo-icon icon-sort"></i></span></th>
-            <th class="numberOfPages numeric" scope="col"><span>Number of Pages<i class="demo-icon icon-sort"></i></span></th>
-            <th class="publishDate" scope="col"><span>Publication Date</span><i class="demo-icon icon-sort"></i></th>
-            <th class="trashcan"><span>Delete</span></th>
+            <th class="cover" data-sortBy="nosort" scope="col"><span>Cover</span></th>
+            <th class="title" data-sortBy="text" scope="col"><span>Title<i class="demo-icon icon-sort"></i></span></th>
+            <th class="author" data-sortBy="text" scope="col"><span>Author<i class="demo-icon icon-sort"></i></span></th>
+            <th class="numberOfPages" data-sortBy="numeric" scope="col"><span>Number of Pages<i class="demo-icon icon-sort"></i></span></th>
+            <th class="publishDate" data-sortBy="numeric" scope="col"><span>Publication Date</span><i class="demo-icon icon-sort"></i></th>
+            <th class="trashcan" data-sortBy="nosort"><span>Delete</span></th>
           </tr>
         </thead>
         <tbody id="tableContactBody">

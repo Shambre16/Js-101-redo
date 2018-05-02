@@ -23,20 +23,20 @@ var Book = function(args) {
 })();
 
 Library.prototype.init = function() {
-  //cache down selectors here, use $ or j, put eveything that needs to initialized here (how do I know?)
+  //cache down selectors here, use $ or j, put eveything that needs to initialized here
   this.$randomBookBtn = $("#randomBook"); //a hook to my button
   this.$randomAuthorBtn = $("#randomAuthor");
   this.$searchButton = $("#searchButton");
   this.$getAuthorsBtn = $("#getAuthors");
   this.$addBookBtn = $("#addBookBtn");
-  this.$formWebsiteInput = $("#formWebsiteInput");
-  this.$formTitleInput = $("#formTitleInput");
-  this.$formAuthorInput = $("#formAuthorInput");
-  this.$formNumberOfPagesInput = $("#formNumberOfPagesInput");
-  this.$formPublishDateInput = $("#formPublishDateInput");
   this.$deleteBookBtn = $("button.deleteBook");
+  this.$deleteAuthorBtn = $("button.deleteAuthor");
+  this.$addAnotherBookBtn = $("#addAnotherBookBtn");
+  this.$addBookTemplate = $(".form-div form").clone();
+  this.$modalAuthors = $("#modalAuthors")
+  this.$tableContactBody = $("#tableContactBody");
 
-  //Put all the things in here for added performance to it
+  //Put all the things in here for added performance
   // this.$alertBtn = $("button.alert");
   // this.$changeBtn = $("button.change-text");
   // this.$logBtn = $("button.log-hello");
@@ -48,78 +48,107 @@ Library.prototype.init = function() {
 Library.prototype._bindEvents = function() {
   $("body").on("updateLibrary", $.proxy(this._handleUpdateLibrary, this));
   this.$addBookBtn.on("click", $.proxy(this._handleAddBook, this));
-  this.$formWebsiteInput.on("click", $.proxy(this._handleAddBook, this));
-  this.$formTitleInput.on("click", $.proxy(this._handleAddBook, this));
-  this.$formAuthorInput.on("click", $.proxy(this._handleAddBook, this));
-  this.$formNumberOfPagesInput.on("click", $.proxy(this._handleAddBook, this));
-  this.$formPublishDateInput.on("click", $.proxy(this._handleAddBook, this));
   this.$searchButton.on("click", $.proxy(this._handleSearch, this));
   this.$randomBookBtn.on("click", $.proxy(this._handleRandomBook, this));
   this.$randomAuthorBtn.on("click", $.proxy(this._handleRandomAuthor, this));
   this.$getAuthorsBtn.on("click", $.proxy(this._handleGetAuthors, this));
-  this.$deleteBookBtn.on("click", "delete", $.proxy(this._handleDelete, this));
+  this.$tableContactBody.on("click", "button.deleteBook", $.proxy(this._handleDelete, this));
+  this.$modalAuthors.on("click", "button.deleteAuthor", $.proxy(this._handleDeleteAuthor, this));
+  this.$addAnotherBookBtn.on("click", $.proxy(this._handleAddMoreBooks, this));
 
   return false;
 };
 
 Library.prototype._handleAddBook = function() {
-  var bookObjectInput = [document.getElementById("formWebsiteInput").value, document.getElementById("formTitleInput").value, document.getElementById("formAuthorInput").value, document.getElementById("formNumberOfPagesInput").value, document.getElementById("formPublishDateInput").value, ];
-  var newBook = {};
-  newBook["cover"] = bookObjectInput[0];
-  newBook["title"] = bookObjectInput[1];
-  newBook["author"] = bookObjectInput[2];
-  newBook["numberOfPages"] = bookObjectInput[3];
-  newBook["publishDate"] = bookObjectInput[4];
-  newBook["trashcan"] = bookObjectInput[5];
-  this.addBook(newBook);
+  var covers = $(".formWebsiteInput");
+  var titles = $(".formTitleInput");
+  var authors = $(".formAuthorInput");
+  var pages = $(".formNumberOfPagesInput");
+  var dates = $(".formPublishDateInput");
+
+  for (var i = 0; i < titles.length; i++) {
+    var newBook = {}
+    newBook.cover = covers[i].value;
+    newBook.title = titles[i].value;
+    newBook.author = authors[i].value;
+    newBook.numberOfPages = pages[i].value;
+    newBook.publishDate = dates[i].value;
+
+    this.addBook(new Book(newBook));
+  }
+
+  $(".form-div").empty();
+  $(".form-div").append(this.$addBookTemplate.clone());
+  return true;
+};
+
+Library.prototype._handleAddMoreBooks = function() {
+  $(".form-div").append(this.$addBookTemplate.clone());
 };
 
 Library.prototype._handleDelete = function(e) {
-  alert("yay");
-  $(e.currentTarget).parent().parent().remove();
+  var row = $(e.currentTarget).parent().parent();
+  this.removeBookByTitle(row.children()[1].innerText);
+  row.remove();
+  return true;
 };
 
 Library.prototype._handleUpdateLibrary = function() {
   this._buildTable(this.myBooksArray);
+  this.setObject("localLibraryStorage");
+  return "Local storage has been updated!";
 };
 
 Library.prototype._handleRandomBook = function() {
   var bookObject = this.getRandomBook();
-  // console.log(bookObject);
   $(".card-img-top").attr("src", bookObject.cover);
   $(".card-title").text(bookObject.title);
   $(".author-paragraph").text(bookObject.author);
   $(".numberOfPages-paragraph").text(bookObject.numberOfPages);
   $(".publishDate-paragraph").text(bookObject.publishDate);
-  // $("#randomBookModal").show()
 };
 
 Library.prototype._handleRandomAuthor = function() {
-  alert(this.getRandomAuthorName());
-  // $("#randomBookModal").append(this.getRandomAuthorName());
+  $(".modal-body.author").text(this.getRandomAuthorName());
 };
 
 Library.prototype._handleGetAuthors = function() {
   var authorList = this.getAuthors();
   var authorListInput = "";
   for (var i = 0; i < authorList.length; i++) {
-    authorListInput = authorListInput + "<li class=\"list-group-item\">" + authorList[i] + "</li>";
+    authorListInput = authorListInput + "<li class=\"list-group-item\"><button class='deleteAuthor'>Delete this Author</button><span>" + authorList[i] + "</span></li>";
   }
   $(".list-group-item").remove();
-  $("#modalAuthors").after(authorListInput);
+  this.$modalAuthors.append(authorListInput);
 };
 
-Library.prototype._handleSearch = function() {
-  alert("yay!");
+Library.prototype._handleDeleteAuthor = function(e) {
+  var author = e.currentTarget.nextElementSibling.innerText;
+  this.removeBooksByAuthor(author);
+  var authorList = this.getAuthors();
+  var authorListInput = "";
+  for (var i = 0; i < authorList.length; i++) {
+    authorListInput = authorListInput + "<li class=\"list-group-item\"><button class='deleteAuthor'>Delete this Author</button><span>" + authorList[i] + "</span></li>";
+  }
+  $(".list-group-item").remove();
+  $("#modalAuthors").append(authorListInput);
+};
+
+Library.prototype._handleSearch = function(e) {
+  event.preventDefault();
   var searchResults = document.getElementById("searchBox").value;
   var arrayResult = this.search(searchResults);
   this._buildTable(arrayResult);
 };
 
+Library.prototype.fullYear = function() {
+  return this.publishDate.getYear();
+};
+
 // Add a line to the HTML table
 Library.prototype.addLineToHTMLTable = function(cover, title, author, numberOfPages, publishDate, trashcan) {
   // Get the body of the table using the selector API
-  var tableBody = document.querySelector("#tableContactBody");
+  var tableBody = this.$tableContactBody[0];
   // Add a new row at the end of the tablevar
   var newRow = tableBody.insertRow();
   // add  new cells to the row
@@ -135,8 +164,6 @@ Library.prototype.addLineToHTMLTable = function(cover, title, author, numberOfPa
   publishDateCell.innerHTML = publishDate;
   var trashcanCell = newRow.insertCell();
   trashcanCell.innerHTML = "<button class='btn btn-info deleteBook'>X</button>";
-  // var trashcanCell = $(trashcanCell).data("title", title);
-  // cell.on("click", $.proxy(this._handleDelete, this));
 };
 
 Library.prototype._buildTable = function(books) {
@@ -145,18 +172,18 @@ Library.prototype._buildTable = function(books) {
     var book = books[i];
     this.addLineToHTMLTable(book.cover, book.title, book.author, book.numberOfPages, book.publishDate, book.trashcan);
   }
-
-  this.$deleteBookBtn = $("button.deleteBook");
-
 };
 
 //Library Instance:
 $(document).ready(function() { //Listen to the document and when you hear this, fire this off
-  window.gLib = new Library("localLibraryStorage");
-  var gLib = window.gLib;
+  var gLib = new Library("localLibraryStorage");
   gLib.init(); //I want this to fire off all the things I want it to do right away --> Set up bind events
   gLib.getObject("localLibraryStorage");
-  $(".table").tablesort();
+  $(".table").tablesort({
+    sortBy: ['nosort', 'text', 'text', 'numeric', 'numeric']
+  });
+  $("#formWebsiteInput").focus();
+  gLib.addBooks(gAllBooks);
 });
 
 var gIT = new Book({
@@ -379,19 +406,15 @@ Library.prototype.setObject = function(instanceKey) {
 
 Library.prototype.getObject = function(instanceKey) {
   var localStorageBooks = JSON.parse(localStorage.getItem(instanceKey));
-  if(localStorageBooks) {
+  if (localStorageBooks) {
     for (var i = 0; i < localStorageBooks.length; i++) {
       var book = localStorageBooks[i];
       this.addBook(new Book(book));
     }
-  return true;
+    return true;
   }
 };
 
 Library.prototype.updateLibrary = function() {
   $("body").trigger("updateLibrary");
 };
-
-// Book.prototype.fullYear = function() {
-//   return this.publishDate.getYear();
-// };
