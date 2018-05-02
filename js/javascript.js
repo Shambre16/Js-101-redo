@@ -1,181 +1,316 @@
-//Book object constructor
-var Book = function(args) {
-  this.cover = args.cover;
-  this.title = args.title;
-  this.author = args.author;
-  this.numberOfPages = args.numberOfPages;
-  this.publishDate = new Date(args.publishDate);
-  this.trashcan = args.trashcan;
-};
+class Book {
+  constructor(args) {
+    this.cover = args.cover;
+    this.title = args.title;
+    this.author = args.author;
+    this.numberOfPages = args.numberOfPages;
+    this.publishDate = new Date(args.publishDate);
+    this.trashcan = args.trashcan;
+  }
+}
 
 // Singleton!!!!!!!!!!!!  Do not use var Singleton = before this.  It will break everything!!!
-(function() {
-  var library_instance;
 
-  window.Library = function(instanceKey) {
+var library_instance;
+
+class Library {
+  constructor(instanceKey) {
     if (library_instance) {
       return library_instance;
     }
     this.myBooksArray = [];
     this.keyInstance = instanceKey;
     library_instance = this;
-  };
-})();
-
-Library.prototype.init = function() {
-  //cache down selectors here, use $ or j, put eveything that needs to initialized here
-  this.$randomBookBtn = $("#randomBook"); //a hook to my button
-  this.$randomAuthorBtn = $("#randomAuthor");
-  this.$searchButton = $("#searchButton");
-  this.$getAuthorsBtn = $("#getAuthors");
-  this.$addBookBtn = $("#addBookBtn");
-  this.$deleteBookBtn = $("button.deleteBook");
-  this.$deleteAuthorBtn = $("button.deleteAuthor");
-  this.$addAnotherBookBtn = $("#addAnotherBookBtn");
-  this.$addBookTemplate = $(".form-div form").clone();
-  this.$modalAuthors = $("#modalAuthors")
-  this.$tableContactBody = $("#tableContactBody");
-
-  //Put all the things in here for added performance
-  // this.$alertBtn = $("button.alert");
-  // this.$changeBtn = $("button.change-text");
-  // this.$logBtn = $("button.log-hello");
-
-  this._bindEvents(); //Set up a specific event handler for each event here
-  return false;
-};
-
-Library.prototype._bindEvents = function() {
-  $("body").on("updateLibrary", $.proxy(this._handleUpdateLibrary, this));
-  this.$addBookBtn.on("click", $.proxy(this._handleAddBook, this));
-  this.$searchButton.on("click", $.proxy(this._handleSearch, this));
-  this.$randomBookBtn.on("click", $.proxy(this._handleRandomBook, this));
-  this.$randomAuthorBtn.on("click", $.proxy(this._handleRandomAuthor, this));
-  this.$getAuthorsBtn.on("click", $.proxy(this._handleGetAuthors, this));
-  this.$tableContactBody.on("click", "button.deleteBook", $.proxy(this._handleDelete, this));
-  this.$modalAuthors.on("click", "button.deleteAuthor", $.proxy(this._handleDeleteAuthor, this));
-  this.$addAnotherBookBtn.on("click", $.proxy(this._handleAddMoreBooks, this));
-
-  return false;
-};
-
-Library.prototype._handleAddBook = function() {
-  var covers = $(".formWebsiteInput");
-  var titles = $(".formTitleInput");
-  var authors = $(".formAuthorInput");
-  var pages = $(".formNumberOfPagesInput");
-  var dates = $(".formPublishDateInput");
-
-  for (var i = 0; i < titles.length; i++) {
-    var newBook = {}
-    newBook.cover = covers[i].value;
-    newBook.title = titles[i].value;
-    newBook.author = authors[i].value;
-    newBook.numberOfPages = pages[i].value;
-    newBook.publishDate = dates[i].value;
-
-    this.addBook(new Book(newBook));
   }
 
-  $(".form-div").empty();
-  $(".form-div").append(this.$addBookTemplate.clone());
-  return true;
-};
-
-Library.prototype._handleAddMoreBooks = function() {
-  $(".form-div").append(this.$addBookTemplate.clone());
-};
-
-Library.prototype._handleDelete = function(e) {
-  var row = $(e.currentTarget).parent().parent();
-  this.removeBookByTitle(row.children()[1].innerText);
-  row.remove();
-  return true;
-};
-
-Library.prototype._handleUpdateLibrary = function() {
-  this._buildTable(this.myBooksArray);
-  this.setObject("localLibraryStorage");
-  return "Local storage has been updated!";
-};
-
-Library.prototype._handleRandomBook = function() {
-  var bookObject = this.getRandomBook();
-  $(".card-img-top").attr("src", bookObject.cover);
-  $(".card-title").text(bookObject.title);
-  $(".author-paragraph").text(bookObject.author);
-  $(".numberOfPages-paragraph").text(bookObject.numberOfPages);
-  $(".publishDate-paragraph").text(bookObject.publishDate);
-};
-
-Library.prototype._handleRandomAuthor = function() {
-  $(".modal-body.author").text(this.getRandomAuthorName());
-};
-
-Library.prototype._handleGetAuthors = function() {
-  var authorList = this.getAuthors();
-  var authorListInput = "";
-  for (var i = 0; i < authorList.length; i++) {
-    authorListInput = authorListInput + "<li class=\"list-group-item\"><button class='deleteAuthor'>Delete this Author</button><span>" + authorList[i] + "</span></li>";
+  init() {
+    //cache down selectors here, use $ or j, put eveything that needs to initialized here
+    this.$randomBookBtn = $("#randomBook"); //a hook to my button
+    this.$randomAuthorBtn = $("#randomAuthor");
+    this.$searchButton = $("#searchButton");
+    this.$getAuthorsBtn = $("#getAuthors");
+    this.$addBookBtn = $("#addBookBtn");
+    this.$deleteBookBtn = $("button.deleteBook");
+    this.$deleteAuthorBtn = $("button.deleteAuthor");
+    this.$addAnotherBookBtn = $("#addAnotherBookBtn");
+    this.$addBookTemplate = $(".form-div form").clone();
+    this.$modalAuthors = $("#modalAuthors");
+    this.$tableContactBody = $("#tableContactBody");
+    //Put all the things in here for added performance
+    // this.$alertBtn = $("button.alert");
+    // this.$changeBtn = $("button.change-text");
+    // this.$logBtn = $("button.log-hello");
+    this._bindEvents(); //Set up a specific event handler for each event here
+    return false;
   }
-  $(".list-group-item").remove();
-  this.$modalAuthors.append(authorListInput);
-};
 
-Library.prototype._handleDeleteAuthor = function(e) {
-  var author = e.currentTarget.nextElementSibling.innerText;
-  this.removeBooksByAuthor(author);
-  var authorList = this.getAuthors();
-  var authorListInput = "";
-  for (var i = 0; i < authorList.length; i++) {
-    authorListInput = authorListInput + "<li class=\"list-group-item\"><button class='deleteAuthor'>Delete this Author</button><span>" + authorList[i] + "</span></li>";
+  _bindEvents() {
+    $("body").on("updateLibrary", $.proxy(this._handleUpdateLibrary, this));
+    this.$addBookBtn.on("click", $.proxy(this._handleAddBook, this));
+    this.$searchButton.on("click", $.proxy(this._handleSearch, this));
+    this.$randomBookBtn.on("click", $.proxy(this._handleRandomBook, this));
+    this.$randomAuthorBtn.on("click", $.proxy(this._handleRandomAuthor, this));
+    this.$getAuthorsBtn.on("click", $.proxy(this._handleGetAuthors, this));
+    this.$tableContactBody.on("click", "button.deleteBook", $.proxy(this._handleDelete, this));
+    this.$modalAuthors.on("click", "button.deleteAuthor", $.proxy(this._handleDeleteAuthor, this));
+    this.$addAnotherBookBtn.on("click", $.proxy(this._handleAddMoreBooks, this));
+    return false;
   }
-  $(".list-group-item").remove();
-  $("#modalAuthors").append(authorListInput);
-};
-
-Library.prototype._handleSearch = function(e) {
-  event.preventDefault();
-  var searchResults = document.getElementById("searchBox").value;
-  var arrayResult = this.search(searchResults);
-  this._buildTable(arrayResult);
-};
-
-Library.prototype.fullYear = function() {
-  return this.publishDate.getYear();
-};
-
-// Add a line to the HTML table
-Library.prototype.addLineToHTMLTable = function(cover, title, author, numberOfPages, publishDate, trashcan) {
-  // Get the body of the table using the selector API
-  var tableBody = this.$tableContactBody[0];
-  // Add a new row at the end of the tablevar
-  var newRow = tableBody.insertRow();
-  // add  new cells to the row
-  var coverCell = newRow.insertCell();
-  coverCell.innerHTML = "<img src=" + cover + ">";
-  var titleCell = newRow.insertCell();
-  titleCell.innerHTML = title;
-  var authorCell = newRow.insertCell();
-  authorCell.innerHTML = author;
-  var numberOfPagesCell = newRow.insertCell();
-  numberOfPagesCell.innerHTML = numberOfPages;
-  var publishDateCell = newRow.insertCell();
-  publishDateCell.innerHTML = publishDate;
-  var trashcanCell = newRow.insertCell();
-  trashcanCell.innerHTML = "<button class='btn btn-info deleteBook'>X</button>";
-};
-
-Library.prototype._buildTable = function(books) {
-  $("#tableContactBody").empty();
-  for (var i = 0; i < books.length; i++) {
-    var book = books[i];
-    this.addLineToHTMLTable(book.cover, book.title, book.author, book.numberOfPages, book.publishDate, book.trashcan);
+  _handleAddBook() {
+    var covers = $(".formWebsiteInput");
+    var titles = $(".formTitleInput");
+    var authors = $(".formAuthorInput");
+    var pages = $(".formNumberOfPagesInput");
+    var dates = $(".formPublishDateInput");
+    for (var i = 0; i < titles.length; i++) {
+      var newBook = {};
+      newBook.cover = covers[i].value;
+      newBook.title = titles[i].value;
+      newBook.author = authors[i].value;
+      newBook.numberOfPages = pages[i].value;
+      newBook.publishDate = dates[i].value;
+      this.addBook(new Book(newBook));
+    }
+    $(".form-div").empty();
+    $(".form-div").append(this.$addBookTemplate.clone());
+    return true;
   }
-};
+
+  _handleAddMoreBooks() {
+    $(".form-div").append(this.$addBookTemplate.clone());
+  }
+
+  _handleDelete(e) {
+    var row = $(e.currentTarget).parent().parent();
+    this.removeBookByTitle(row.children()[1].innerText);
+    row.remove();
+    return true;
+  }
+
+  _handleUpdateLibrary() {
+    this._buildTable(this.myBooksArray);
+    this.setObject("localLibraryStorage");
+    return "Local storage has been updated!";
+  }
+
+  _handleRandomBook() {
+    var bookObject = this.getRandomBook();
+    $(".card-img-top").attr("src", bookObject.cover);
+    $(".card-title").text(bookObject.title);
+    $(".author-paragraph").text(bookObject.author);
+    $(".numberOfPages-paragraph").text(bookObject.numberOfPages);
+    $(".publishDate-paragraph").text(bookObject.publishDate);
+  }
+
+  _handleRandomAuthor() {
+    $(".modal-body.author").text(this.getRandomAuthorName());
+  }
+
+  _handleGetAuthors() {
+    var authorList = this.getAuthors();
+    var authorListInput = "";
+    for (var i = 0; i < authorList.length; i++) {
+      authorListInput = authorListInput + "<li class=\"list-group-item\"><button class='deleteAuthor'>Delete this Author</button><span>" + authorList[i] + "</span></li>";
+    }
+    $(".list-group-item").remove();
+    this.$modalAuthors.append(authorListInput);
+  }
+
+  _handleDeleteAuthor(e) {
+    var author = e.currentTarget.nextElementSibling.innerText;
+    this.removeBooksByAuthor(author);
+    var authorList = this.getAuthors();
+    var authorListInput = "";
+    for (var i = 0; i < authorList.length; i++) {
+      authorListInput = authorListInput + "<li class=\"list-group-item\"><button class='deleteAuthor'>Delete this Author</button><span>" + authorList[i] + "</span></li>";
+    }
+    $(".list-group-item").remove();
+    $("#modalAuthors").append(authorListInput);
+  }
+
+  _handleSearch(e) {
+    event.preventDefault();
+    var searchResults = document.getElementById("searchBox").value;
+    var arrayResult = this.search(searchResults);
+    this._buildTable(arrayResult);
+  }
+
+  fullYear() {
+    return this.publishDate.getYear();
+  }
+
+  // Add a line to the HTML table
+  addLineToHTMLTable(cover, title, author, numberOfPages, publishDate, trashcan) {
+    // Get the body of the table using the selector API
+    var tableBody = this.$tableContactBody[0];
+    // Add a new row at the end of the tablevar
+    var newRow = tableBody.insertRow();
+    // add  new cells to the row
+    var coverCell = newRow.insertCell();
+    coverCell.innerHTML = "<img src=" + cover + ">";
+    var titleCell = newRow.insertCell();
+    titleCell.innerHTML = title;
+    var authorCell = newRow.insertCell();
+    authorCell.innerHTML = author;
+    var numberOfPagesCell = newRow.insertCell();
+    numberOfPagesCell.innerHTML = numberOfPages;
+    var publishDateCell = newRow.insertCell();
+    publishDateCell.innerHTML = publishDate;
+    var trashcanCell = newRow.insertCell();
+    trashcanCell.innerHTML = "<button class='btn btn-info deleteBook'>X</button>";
+  }
+
+  _buildTable(books) {
+    $("#tableContactBody").empty();
+    for (var i = 0; i < books.length; i++) {
+      var book = books[i];
+      this.addLineToHTMLTable(book.cover, book.title, book.author, book.numberOfPages, book.publishDate, book.trashcan);
+    }
+  }
+  // Run code
+  addBook(book) {
+    // if (book.constructor === Array) {
+    //   return false;
+    // }
+    for (var i = 0; i < this.myBooksArray.length; i++) {
+      var currentBook = this.myBooksArray[i];
+      if (currentBook.title === book.title) {
+        return false;
+      }
+    }
+    this.myBooksArray.push(book);
+    this.updateLibrary();
+    return true;
+  }
+
+  removeBookByTitle(title) {
+    for (var i = 0; i < this.myBooksArray.length; i++) {
+      if (this.myBooksArray[i].title === title) {
+        this.myBooksArray.splice(i, 1);
+        this.updateLibrary();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  removeBooksByAuthor(authorName) {
+    var result = false;
+    for (var i = this.myBooksArray.length - 1; i >= 0; i--) {
+      if (this.myBooksArray[i].author === authorName) {
+        this.myBooksArray.splice(i, 1);
+        this.updateLibrary();
+      }
+    }
+    return true;
+  }
+
+  getRandomBook() {
+    if (this.myBooksArray.length == 0) {
+      return null;
+    }
+    else {
+      return this.myBooksArray[(Math.floor(Math.random() * this.myBooksArray.length))];
+    }
+    return true;
+  }
+
+  getBookByTitle(title) {
+    var tempArray = [];
+    var pattern = new RegExp(title, "i");
+    for (var i = 0; i < this.myBooksArray.length; i++) {
+      if (pattern.test(this.myBooksArray[i].title)) {
+        tempArray.push(this.myBooksArray[i]);
+      }
+    }
+    return tempArray;
+  }
+
+  getBooksByAuthor(authorName) {
+    var tempArray = [];
+    var pattern = new RegExp(authorName, "i");
+    for (var i = 0; i < this.myBooksArray.length; i++) {
+      if (pattern.test(this.myBooksArray[i].author)) {
+        tempArray.push(this.myBooksArray[i]);
+      }
+    }
+    return tempArray;
+  }
+
+  addBooks(books) {
+    if (!books.constructor === Array) {
+      return null;
+    }
+    var count = 0;
+    for (var i = 0; i < books.length; i++) {
+      if (this.addBook(books[i])) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  getAuthors() {
+    var tempArray = [];
+    for (var i = 0; i < this.myBooksArray.length; i++) {
+      if (tempArray.indexOf(this.myBooksArray[i].author) === -1) {
+        tempArray.push(this.myBooksArray[i].author);
+      }
+    }
+    return tempArray;
+  }
+
+  getRandomAuthorName() {
+    if (this.myBooksArray.length == 0) {
+      return [];
+    }
+    else {
+      return this.myBooksArray[(Math.floor(Math.random() * this.myBooksArray.length))].author;
+    }
+  }
+
+  search(string) {
+    return this.getBookByTitle(string).concat(this.getBooksByAuthor(string));
+  }
+
+  setObject(instanceKey) {
+    localStorage.setItem(instanceKey, JSON.stringify(this.myBooksArray));
+    return instanceKey + " is set!";
+  }
+
+  getObject(instanceKey) {
+    var localStorageBooks = JSON.parse(localStorage.getItem(instanceKey));
+    if (localStorageBooks) {
+      for (var i = 0; i < localStorageBooks.length; i++) {
+        var book = localStorageBooks[i];
+        this.addBook(new Book(book));
+      }
+      return true;
+    }
+  }
+
+  updateLibrary() {
+    $("body").trigger("updateLibrary");
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //Library Instance:
-$(document).ready(function() { //Listen to the document and when you hear this, fire this off
+$(document).ready(function () { //Listen to the document and when you hear this, fire this off
   var gLib = new Library("localLibraryStorage");
   gLib.init(); //I want this to fire off all the things I want it to do right away --> Set up bind events
   gLib.getObject("localLibraryStorage");
@@ -294,127 +429,3 @@ var gDreamNovel = new Book({
 
 //AllBookInstances
 window.gAllBooks = [gIT, gIT2, gCatcherInTheRye, gWrinkleInTime, gMistsOfAvalon, gTheyAllSawACat, gTheBigRedBarn, gInterpreterOfMaladies, gUnaccustomedEarth, gTommyknockers, gStephanie, gTheVelveteenRabbit, gDreamNovel];
-// Run code
-
-Library.prototype.addBook = function(book) {
-  // if (book.constructor === Array) {
-  //   return false;
-  // }
-  for (var i = 0; i < this.myBooksArray.length; i++) {
-    var currentBook = this.myBooksArray[i];
-    if (currentBook.title === book.title) {
-      return false;
-    }
-  }
-  this.myBooksArray.push(book);
-  this.updateLibrary();
-  return true;
-};
-
-Library.prototype.removeBookByTitle = function(title) {
-  for (var i = 0; i < this.myBooksArray.length; i++) {
-    if (this.myBooksArray[i].title === title) {
-      this.myBooksArray.splice(i, 1);
-      this.updateLibrary();
-      return true;
-    }
-  }
-  return false;
-};
-
-Library.prototype.removeBooksByAuthor = function(authorName) {
-  var result = false;
-  for (var i = this.myBooksArray.length - 1; i >= 0; i--) {
-    if (this.myBooksArray[i].author === authorName) {
-      this.myBooksArray.splice(i, 1);
-      this.updateLibrary();
-    }
-  }
-  return true;
-};
-
-Library.prototype.getRandomBook = function() {
-  if (this.myBooksArray.length == 0) {
-    return null;
-  } else {
-    return this.myBooksArray[(Math.floor(Math.random() * this.myBooksArray.length))];
-  }
-  return true;
-};
-
-Library.prototype.getBookByTitle = function(title) {
-  var tempArray = [];
-  var pattern = new RegExp(title, "i");
-  for (var i = 0; i < this.myBooksArray.length; i++) {
-    if (pattern.test(this.myBooksArray[i].title)) {
-      tempArray.push(this.myBooksArray[i]);
-    }
-  }
-  return tempArray;
-};
-
-Library.prototype.getBooksByAuthor = function(authorName) {
-  var tempArray = [];
-  var pattern = new RegExp(authorName, "i");
-  for (var i = 0; i < this.myBooksArray.length; i++) {
-    if (pattern.test(this.myBooksArray[i].author)) {
-      tempArray.push(this.myBooksArray[i]);
-    }
-  }
-  return tempArray;
-};
-
-Library.prototype.addBooks = function(books) {
-  if (!books.constructor === Array) {
-    return null;
-  }
-  var count = 0;
-  for (var i = 0; i < books.length; i++) {
-    if (this.addBook(books[i])) {
-      count++;
-    }
-  }
-  return count;
-};
-
-Library.prototype.getAuthors = function() {
-  var tempArray = [];
-  for (var i = 0; i < this.myBooksArray.length; i++) {
-    if (tempArray.indexOf(this.myBooksArray[i].author) === -1) {
-      tempArray.push(this.myBooksArray[i].author);
-    }
-  }
-  return tempArray;
-};
-
-Library.prototype.getRandomAuthorName = function() {
-  if (this.myBooksArray.length == 0) {
-    return [];
-  } else {
-    return this.myBooksArray[(Math.floor(Math.random() * this.myBooksArray.length))].author;
-  }
-};
-
-Library.prototype.search = function(string) {
-  return this.getBookByTitle(string).concat(this.getBooksByAuthor(string));
-};
-
-Library.prototype.setObject = function(instanceKey) {
-  localStorage.setItem(instanceKey, JSON.stringify(this.myBooksArray));
-  return instanceKey + " is set!";
-};
-
-Library.prototype.getObject = function(instanceKey) {
-  var localStorageBooks = JSON.parse(localStorage.getItem(instanceKey));
-  if (localStorageBooks) {
-    for (var i = 0; i < localStorageBooks.length; i++) {
-      var book = localStorageBooks[i];
-      this.addBook(new Book(book));
-    }
-    return true;
-  }
-};
-
-Library.prototype.updateLibrary = function() {
-  $("body").trigger("updateLibrary");
-};
