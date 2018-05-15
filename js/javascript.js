@@ -1,10 +1,11 @@
 (function() {
   class Book {
     constructor(args) {
+      this._id = args._id;
       this.cover = args.cover;
       this.title = args.title;
       this.author = args.author;
-      this.numberOfPages = args.numberOfPages;
+      this.numberOfPages = args.numPages;
       this.publishDate = new Date(args.publishDate);
       this.trashcan = args.trashcan;
     }
@@ -19,6 +20,7 @@
       }
       this.myBooksArray = [];
       this.keyInstance = instanceKey;
+      this.pGetBooksHandler = $.proxy(this.successfulGet, this);
       library_instance = this;
     }
 
@@ -37,6 +39,8 @@
       this.$tableContactBody = $("#tableContactBody");
       //Put all things that traverse the DOM multiple times in here for added performance
       this._bindEvents(); //Set up a specific event handler for each event here
+      // this.addBookAjax();
+      this.getBookAjax();
       return false;
     }
 
@@ -68,6 +72,7 @@
         newBook.numberOfPages = pages[i].value;
         newBook.publishDate = dates[i].value;
         this.addBook(new Book(newBook));
+        // this.addBookAjax();
       }
       $(".form-div").empty();
       $(".form-div").append(this.$addBookTemplate.clone());
@@ -82,13 +87,14 @@
       let row = $(e.currentTarget).parent().parent();
       this.removeBookByTitle(row.children()[1].innerText);
       row.remove();
+      // this.deleteBookAjax();
       return true;
     }
 
     _handleUpdateLibrary() {
       this._buildTable(this.myBooksArray);
-      this.setObject("localLibraryStorage");
-      return "Local storage has been updated!";
+      // this.setObject("localLibraryStorage");
+      // return "Local storage has been updated!";
     }
 
     _handleRandomBook() {
@@ -170,15 +176,20 @@
         this._addLineToHTMLTable(book.cover, book.title, book.author, book.numberOfPages, book.publishDate, book.trashcan);
       }
     }
+
+
     // Run code
     addBook(book) {
+      // this.addBookAjax();
       for (let i = 0; i < this.myBooksArray.length; i++) {
         let currentBook = this.myBooksArray[i];
         if (currentBook.title === book.title) {
           return false;
         }
       }
+
       this.myBooksArray.push(book);
+      this.addBookAjax();
       this.updateLibrary();
       return true;
     }
@@ -186,6 +197,7 @@
     removeBookByTitle(title) {
       for (let i = 0; i < this.myBooksArray.length; i++) {
         if (this.myBooksArray[i].title === title) {
+          this.deleteBookAjax(this.myBooksArray[i]);
           this.myBooksArray.splice(i, 1);
           this.updateLibrary();
           return true;
@@ -248,6 +260,7 @@
       }
       return count;
     }
+
     getAuthors() {
       let tempArray = [];
       for (let i = 0; i < this.myBooksArray.length; i++) {
@@ -270,20 +283,69 @@
       return this.getBookByTitle(string).concat(this.getBooksByAuthor(string));
     }
 
-    setObject(instanceKey) {
-      localStorage.setItem(instanceKey, JSON.stringify(this.myBooksArray));
-      return instanceKey + " is set!";
+    // setObject(instanceKey) {
+    //   localStorage.setItem(instanceKey, JSON.stringify(this.myBooksArray));
+    //   return instanceKey + " is set!";
+    // }
+    //
+    // getObject(instanceKey) {
+    //   let localStorageBooks = JSON.parse(localStorage.getItem(instanceKey));
+    //   if (localStorageBooks) {
+    //     for (let i = 0; i < localStorageBooks.length; i++) {
+    //       let book = localStorageBooks[i];
+    //       this.addBook(new Book(book));
+    //     }
+    //     return true;
+    //   }
+
+    addBookAjax() {
+      $.ajax({
+        dataType: 'json',
+        type: "POST",
+        url: "http://localhost:3000/library/",
+        // path: "/",
+        data: {
+          cover : $(".formWebsiteInput").val(),
+          title : $(".formTitleInput").val(),
+          author : $(".formAuthorInput").val(),
+          pubDate : $(".formPublishDateInput").val(),
+          numPages : $(".formNumberOfPagesInput").val()
+        }
+      }).done(function(response){
+        console.log(response)}).fail(function(){
+        console.log("Your POST request has failed");
+      });
     }
 
-    getObject(instanceKey) {
-      let localStorageBooks = JSON.parse(localStorage.getItem(instanceKey));
-      if (localStorageBooks) {
-        for (let i = 0; i < localStorageBooks.length; i++) {
-          let book = localStorageBooks[i];
-          this.addBook(new Book(book));
-        }
-        return true;
+    getBookAjax() {
+      $.ajax({
+        dataType: 'json',
+        type: "GET",
+        url: "http://localhost:3000/library/"
+      })
+      .done(this.pGetBooksHandler)
+      .fail(function(){
+        console.log("Your GET request has failed");
+      });
+    }
+
+    successfulGet(response) {
+    let results=[];
+      for (var i = 0; i < response.length; i++) {
+        results.push(new Book(response[i]));
       }
+      this.myBooksArray = results;
+      console.log(results);
+      this.updateLibrary();
+  }
+
+    deleteBookAjax(book) {
+      $.ajax({
+        dataType: 'json',
+        type: "DELETE",
+        url: "http://localhost:3000/library/" + book._id,
+        path: "/:id"
+      });
     }
 
     updateLibrary() {
@@ -295,7 +357,7 @@
   $(document).ready(function() { //Listen to the document and when you hear this, fire this off
     const gLib = new Library("localLibraryStorage");
     gLib.init(); //I want this to fire off all the things I want it to do right away --> Set up bind events
-    gLib.getObject("localLibraryStorage");
+    // gLib.getObject("localLibraryStorage");
     $('#myTable').tablesorter({
       headers: {
         0: {
