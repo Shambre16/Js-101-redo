@@ -138,6 +138,57 @@
             </div>
           </div>
         </div>
+        <!-- Edit Button trigger modal -->
+        <!-- <button type="button" class="btn btn-info" id="randomBook" data-toggle="modal" data-target="#randomBookModalCard">
+          Get a Random Book by Title
+        </button> -->
+        <!-- Edit Modal-->
+        <div class="modal fade" id="editModalCard" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Your Previous Entry Below:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body book">
+                <div class="card" id="editor" style="width: 28em">
+                  <div class="card-body" id="additionalForm">
+                    <div class="form-block">
+                      <form id="inputForm">
+                        <div class="form-group justify-items-center">
+                          <label for="formGroupExampleInput">Cover Image URL</label>
+                          <input type="text" class="form-control editFormWebsiteInput" name="coverInput" placeholder="" value="">
+                        </div>
+                        <div class="form-group">
+                          <label for="formGroupExampleInput">Title</label>
+                          <input type="text" class="form-control editFormTitleInput" name="titleInput" placeholder="">
+                        </div>
+                        <div class="form-group">
+                          <label for="formGroupExampleInput2">Author</label>
+                          <input type="text" class="form-control editFormAuthorInput" name="authorInput" placeholder="">
+                        </div>
+                        <div class="form-group">
+                          <label for="formGroupExampleInput">Number of Pages</label>
+                          <input type="text" class="form-control editFormNumberOfPagesInput" name="pagesInput" placeholder="">
+                        </div>
+                        <div class="form-group">
+                          <label for="formGroupExampleInput2">Publish Date</label>
+                          <input type="date" class="form-control editFormPublishDateInput" name="dateInput" placeholder="">
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button class="btn btn-info" id="modalEdit" type="submit">Save Changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </nav>
       <!-- Search bar -->
       <div>
@@ -164,25 +215,6 @@
         <tbody id="tableContactBody">
         </tbody>
       </table>
-      <div class="modal" id="modalEdit" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Modal title</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body editForm">
-              <p>Modal body text goes here.</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
   <script src="js/jquery.js" charset="utf-8"></script>
