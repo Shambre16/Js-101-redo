@@ -6,7 +6,8 @@
       this.title = args.title;
       this.author = args.author;
       this.numberOfPages = args.numPages;
-      this.publishDate = new Date(args.publishDate);
+      this.publishDate = new Date(args.pubDate);
+      this.edit = args.edit;
       this.trashcan = args.trashcan;
     }
   }
@@ -21,6 +22,7 @@
       this.myBooksArray = [];
       this.keyInstance = instanceKey;
       this.pGetBooksHandler = $.proxy(this.successfulGet, this);
+      // this.pGetRandomBooksHandler = $.proxy(this.successfulRandomGet, this);
       library_instance = this;
     }
 
@@ -31,16 +33,16 @@
       this.$addAnotherBookBtn = $("#addAnotherBookBtn");
       this.$getAuthorsBtn = $("#getAuthors");
       this.$modalAuthors = $("#modalAuthors");
-      this.$deleteAuthorBtn = $("button.deleteAuthor");
       this.$randomAuthorBtn = $("#randomAuthor");
       this.$randomBookBtn = $("#randomBook"); //a hook to my button
       this.$searchButton = $("#searchButton");
-      this.$deleteBookBtn = $("button.deleteBook");
       this.$tableContactBody = $("#tableContactBody");
+      this.$modalEdit = $("#modalEdit");
       //Put all things that traverse the DOM multiple times in here for added performance
       this._bindEvents(); //Set up a specific event handler for each event here
       // this.addBookAjax();
       this.getBookAjax();
+      // this.$editBookButton = $("#editBook");
       return false;
     }
 
@@ -54,6 +56,8 @@
       this.$randomBookBtn.on("click", $.proxy(this._handleRandomBook, this));
       this.$searchButton.on("click", $.proxy(this._handleSearch, this));
       this.$tableContactBody.on("click", "button.deleteBook", $.proxy(this._handleDelete, this));
+      this.$tableContactBody.on("click", "button.editBook", $.proxy(this._handleEdit, this));
+      // this.$modalEdit.on("click", $.proxy(this._handleEdit, this));
 
       return false;
     }
@@ -91,6 +95,17 @@
       return true;
     }
 
+    _handleEdit(book, e) {
+      var book = this.bookToEdit;
+      book = $("form").serializeArray();
+      console.log(book);
+      // $("#inputForm").contentEditable = true;
+      // this.bookToEdit.title= newTitle;
+      // this.bookToEdit.author = newAuthor;
+      // this.bookToEdit.numberOfPages = newNumberOfPages;
+      // this.bookToEdit.publishDate = newPublishDate;
+    }
+
     _handleUpdateLibrary() {
       this._buildTable(this.myBooksArray);
       // this.setObject("localLibraryStorage");
@@ -104,6 +119,7 @@
       $(".author-paragraph").text(bookObject.author);
       $(".numberOfPages-paragraph").text(bookObject.numberOfPages);
       $(".publishDate-paragraph").text(bookObject.publishDate);
+      this.getRandomBookAjax(bookObject);
       return true;
     }
 
@@ -138,14 +154,14 @@
 
     _handleSearch(e) {
       event.preventDefault();
-      let searchResults = document.getElementById("searchBox").value;
+      let searchResults = $("#searchBox").val();
       let arrayResult = this.search(searchResults);
       this._buildTable(arrayResult);
       return true;
     }
 
     // Add a line to the HTML table
-    _addLineToHTMLTable(cover, title, author, numberOfPages, publishDate, trashcan) {
+    _addLineToHTMLTable(cover, title, author, numberOfPages, publishDate, edit, trashcan) {
       // Get the body of the table using the selector API
       let tableBody = this.$tableContactBody[0];
       // Add a new row at the end of the table
@@ -165,6 +181,8 @@
         day: "numeric",
         year: "numeric"
       });
+      let editCell = newRow.insertCell();
+      editCell.innerHTML = "<button class='btn btn-info editBook'>Edit</button>";
       let trashcanCell = newRow.insertCell();
       trashcanCell.innerHTML = "<button class='btn btn-info deleteBook'>X</button>";
     }
@@ -173,7 +191,7 @@
       $("#tableContactBody").empty();
       for (let i = 0; i < books.length; i++) {
         let book = books[i];
-        this._addLineToHTMLTable(book.cover, book.title, book.author, book.numberOfPages, book.publishDate, book.trashcan);
+        this._addLineToHTMLTable(book.cover, book.title, book.author, book.numberOfPages, book.publishDate, book.edit, book.trashcan);
       }
     }
 
@@ -256,6 +274,7 @@
       for (let i = 0; i < books.length; i++) {
         if (this.addBook(books[i])) {
           count++;
+          // this.addBookAjax();
         }
       }
       return count;
@@ -339,12 +358,45 @@
       this.updateLibrary();
   }
 
+
+  getRandomBookAjax(book) {
+    $.ajax({
+      dataType: 'json',
+      type: "GET",
+      url: "http://localhost:3000/library/" + book._id,
+    })
+    .done(function(response){
+    })
+    .fail(function(){
+      console.log("Your GET request has failed");
+    });
+  }
+
+  // successfulRandomGet(response) {
+  //     return this.response[i];
+  //     console.log(response[i]);
+  //   }
+
     deleteBookAjax(book) {
       $.ajax({
         dataType: 'json',
         type: "DELETE",
         url: "http://localhost:3000/library/" + book._id,
-        path: "/:id"
+      });
+    }
+
+    editBookAjax(book) {
+      $.ajax({
+        dataType: 'json',
+        type: "PUT",
+        url: "http://localhost:3000/library/" + book._id,
+        // data: {
+        //   cover:
+        //   title:
+        //   author:
+        //   numPages:
+        //   pubDate:
+        // }
       });
     }
 
@@ -366,6 +418,9 @@
         5: {
           sorter: false
         }
+        // 6: {
+        //   sorter: false
+        // }
       }
     });
     $("#formWebsiteInput").focus();
