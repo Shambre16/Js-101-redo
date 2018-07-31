@@ -9,6 +9,7 @@
       this.pubDate = new Date(args.pubDate);
       this.edit = args.edit;
       this.trashcan = args.trashcan;
+      this.__v - args.__v;
     }
   }
 
@@ -66,13 +67,15 @@
       return false;
     }
 
-    _handleAddBook() {
+    _handleAddBook(book) {
       let covers = $(".formWebsiteInput");
       let titles = $(".formTitleInput");
       let authors = $(".formAuthorInput");
       let pages = $(".formNumberOfPagesInput");
       let dates = $(".formPublishDateInput");
+
       for (let i = 0; i < titles.length; i++) {
+        console.log(titles);
         let newBook = {};
         newBook.cover = covers[i].value;
         newBook.title = titles[i].value;
@@ -123,6 +126,7 @@
         book.numPages = $(".editFormNumberOfPagesInput").val();
         book.pubDate = $(".editFormPublishDateInput").val();
         this.savebook(book);
+        this.updateLibrary();
         // this.$tableContactBody.append(this.book.cover, this.book.title, this.book.author, this.book.numPages, this.book.pubDate);
 
     }
@@ -210,6 +214,7 @@
     _addLineToHTMLTable(id, cover, title, author, numPages, pubDate, edit, trashcan) {
       // Get the body of the table using the selector API
       let tableBody = this.$tableContactBody[0];
+      // console.log(tableBody);
       // Add a new row at the end of the table
       let newRow = tableBody.insertRow();
       // add  new cells to the row
@@ -381,7 +386,7 @@
           numPages: $(".formNumberOfPagesInput").val()
         }
       }).done(function(response) {
-
+        // this.updateLibrary(); is not a function here, apparently
       }).fail(function() {
         console.log("Your POST request has failed");
       });
@@ -434,15 +439,20 @@
         dataType: 'json',
         type: "DELETE",
         url: "http://localhost:3000/library/" + book._id,
+        success: data => {
+          this.updateLibrary();
+        }
       });
     }
 
     editBookAjax(book) {
       // this.getRandomBookAjax(book);
       let url = "http://localhost:3000/library/" + this.bookToEdit;
+      // console.log("URL is below:");
+      // console.log(url);
       // console.log(book)
       $.ajax({
-          dataType: 'json',
+          dataType: 'text',
           type: "PUT",
           url: url,
           data: {
@@ -457,12 +467,26 @@
     }
 
     successfulEditAjax(response) {
-      console.log(response);
-      var results = [];
-      results.push(new Book(response));
-      results.append(results);
-      this.myBooksArray = results;
-      this.updateLibrary();
+      // var results = [];
+      console.log("This is the response being returned by a successful edit: " + response); // Just returns an object that contains a string: {"_id":"5b5a0b04e46ec3189caedec0","title":"g","author":"g","pubDate":"7777-07-07T00:00:00.000Z","numPages":7,"cover":"g","__v":0}
+      console.log("This is the parsed response returned on a successful edit: " + JSON.parse(response));  // Just returns: [object Object]
+      console.log("This is the parsed response being passed through a new Book constructor on successful edit: " + new Book(JSON.parse(response))); //Just returns: [object Object]
+      // console.log("This is the parsed response being passed through a new Book constructor and pushed onto my bookshelf on successful edit: " + this.myBooksArray.push(new Book(JSON.parse(response))));  // Just returns: 11 (matches the db)
+      this.addBook(this.myBooksArray.push(new Book(JSON.parse(response))));
+      // console.log("This is my books array: " + this.myBooksArray);
+      // console.log("This is my bookshelf now:" + this.myBooksArray.push(new Book(JSON.parse(response))));
+      // this.addBookAjax(response);
+      // var newBookInfo = JSON.parse(response);
+      // console.log("NewBookInfo is below!");
+      // console.log(newBookInfo);
+      // if (newBookInfo) {
+      //   for (var i = 0; i < newBookInfo.length; i++) {
+      //
+      //   }
+      // }
+      // results.append(response);
+      // this.myBooksArray = results;
+      // console.log(this.updateLibrary());
 
       // response.cover = $(".editFormWebsiteInput").val(),
       // response.title = $(".editFormTitleInput").val(),
@@ -473,7 +497,7 @@
     }
 
     updateLibrary() {
-      $("body").trigger("updateLibrary");
+      $("body").trigger("updateLibrary");  //replace with dispatch trigger ("objUpdate2", {booksAdded : bookCt + "books were added today"})
     }
   }
 
@@ -483,19 +507,19 @@
     const gLib = new Library(); //Step 2) This tells the browser to create the Library instance and get ready to render it with the book instances created below (?).
     gLib.init(); //Step 3)  This method initializes, or starts up anything in my init() method call.  I want this to fire off all the things I want the page to do right away --> Like set up my bind events.
     // gLib.getObject("localLibraryStorage");
-    $('#myTable').tablesorter({ //Not really a step, but ensures that upon page load, the method calls myTable tells it to apply the tablesorter method from my plug in.
-      headers: {
-        0: {
-          sorter: false
-        },
-        5: {
-          sorter: false
-        }
-        // 6: {
-        //   sorter: false
-        // }
-      }
-    })
+    // $('#myTable').tablesorter({ //Not really a step, but ensures that upon page load, the method calls myTable tells it to apply the tablesorter method from my plug in.
+    //   headers: {
+    //     0: {
+    //       sorter: false
+    //     },
+    //     5: {
+    //       sorter: false
+    //     }
+    //     // 6: {
+    //     //   sorter: false
+    //     // }
+    //   }
+    // })
     $("#formWebsiteInput").focus(); //Not really a step and I don't think it's doing anything.
     // gLib.addBooks(gAllBooks);
   });
