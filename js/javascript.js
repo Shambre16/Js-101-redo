@@ -9,7 +9,6 @@
       this.pubDate = new Date(args.pubDate);
       this.edit = args.edit;
       this.trashcan = args.trashcan;
-      this.__v - args.__v;
     }
   }
 
@@ -33,6 +32,7 @@
       this.$addBookBtn = $("#addBookBtn");
       this.$addBookTemplate = $(".form-div form").clone();
       this.$addAnotherBookBtn = $("#addAnotherBookBtn");
+      this.$addMultipleBooksBtn = $("#multiBookBtn");
       this.$getAuthorsBtn = $("#getAuthors");
       this.$modalAuthors = $("#modalAuthors");
       this.$randomAuthorBtn = $("#randomAuthor");
@@ -53,6 +53,7 @@
       $("body").on("updateLibrary", $.proxy(this._handleUpdateLibrary, this)); //This says when the "update library" event is triggered on the body, to refer it to the handler to run the function that builds the table anew using the most up to date information from the database array.
       this.$addBookBtn.on("click", $.proxy(this._handleAddBook, this)); //This says that when the add book button is clicked, the event is triggered and it refers to the handler to run the function that adds a book.
       this.$addAnotherBookBtn.on("click", $.proxy(this._handleAddMoreBooks, this)); //This says that when the add another book button is clicked, the event is triggered and it refers to the handler to run the function that adds a blank form field.
+      this.$addMultipleBooksBtn.on("click", $.proxy(this._handleAddMultipleBooks, this));
       this.$getAuthorsBtn.on("click", $.proxy(this._handleGetAuthors, this)); //This says that when the get authors button is clicked, the event is triggered and it refers to the handler to run the function that pulls the authors up.
       this.$modalAuthors.on("click", "button.deleteAuthor", $.proxy(this._handleDeleteAuthor, this)); //This says that when the delete author button is clicked, the event is triggered and it refers to the handler to run the function that pulls the authors up in the modal div.
       this.$randomAuthorBtn.on("click", $.proxy(this._handleRandomAuthor, this)); //This says that when the get random author button is clicked, the event is triggered and it refers to the handler to run the function that pulls the authors up in the modal div.
@@ -73,9 +74,7 @@
       let authors = $(".formAuthorInput");
       let pages = $(".formNumberOfPagesInput");
       let dates = $(".formPublishDateInput");
-
       for (let i = 0; i < titles.length; i++) {
-        console.log(titles);
         let newBook = {};
         newBook.cover = covers[i].value;
         newBook.title = titles[i].value;
@@ -93,6 +92,10 @@
     _handleAddMoreBooks() {
       $(".form-div").append(this.$addBookTemplate.clone());
     }
+
+    _handleAddMultipleBooks(books){
+
+  }
 
     _handleDelete(e) {
       let row = $(e.currentTarget).parent().parent();
@@ -124,9 +127,10 @@
         book.title = $(".editFormTitleInput").val();
         book.author = $(".editFormAuthorInput").val();
         book.numPages = $(".editFormNumberOfPagesInput").val();
-        book.pubDate = $(".editFormPublishDateInput").val();
+        book.pubDate = new Date($(".editFormPublishDateInput").val());
         this.savebook(book);
-        this.updateLibrary();
+        console.log((book));
+        this.editBookAjax();
         // this.$tableContactBody.append(this.book.cover, this.book.title, this.book.author, this.book.numPages, this.book.pubDate);
 
     }
@@ -229,11 +233,9 @@
       let numPagesCell = newRow.insertCell();
       numPagesCell.innerHTML = numPages;
       let pubDateCell = newRow.insertCell();
-      pubDateCell.innerHTML = pubDate.toLocaleDateString("en-us", {
-        month: "numeric",
-        day: "numeric",
-        year: "numeric"
-      });
+      pubDateCell.innerHTML = new Date(pubDate); //.toLocaleDateString("en-us", {
+      //  year: "numeric"
+      // });
       let editCell = newRow.insertCell();
       editCell.innerHTML = "<button class='btn btn-info editBook' data-toggle='modal' data-target='#editModalCard'>Edit</button>";
       let trashcanCell = newRow.insertCell();
@@ -261,7 +263,7 @@
       }
 
       this.myBooksArray.push(book);
-      this.addBookAjax();
+      this.addBookAjax(book);
       this.updateLibrary();
       return true;
     }
@@ -386,13 +388,14 @@
           numPages: $(".formNumberOfPagesInput").val()
         }
       }).done(function(response) {
-        // this.updateLibrary(); is not a function here, apparently
+
       }).fail(function() {
         console.log("Your POST request has failed");
       });
     }
 
     getBookAjax() {
+      $("#tableContactBody").empty();
       $.ajax({
           dataType: 'json',
           type: "GET",
@@ -439,9 +442,6 @@
         dataType: 'json',
         type: "DELETE",
         url: "http://localhost:3000/library/" + book._id,
-        success: data => {
-          this.updateLibrary();
-        }
       });
     }
 
@@ -468,10 +468,8 @@
 
     successfulEditAjax(response) {
       // var results = [];
-      console.log("This is the response being returned by a successful edit: " + response); // Just returns an object that contains a string: {"_id":"5b5a0b04e46ec3189caedec0","title":"g","author":"g","pubDate":"7777-07-07T00:00:00.000Z","numPages":7,"cover":"g","__v":0}
-      console.log("This is the parsed response returned on a successful edit: " + JSON.parse(response));  // Just returns: [object Object]
-      console.log("This is the parsed response being passed through a new Book constructor on successful edit: " + new Book(JSON.parse(response))); //Just returns: [object Object]
-      // console.log("This is the parsed response being passed through a new Book constructor and pushed onto my bookshelf on successful edit: " + this.myBooksArray.push(new Book(JSON.parse(response))));  // Just returns: 11 (matches the db)
+      // console.log("This is the response being called by a successful edit: " + response);
+      // this.getRandomBookAjax(response);
       this.addBook(this.myBooksArray.push(new Book(JSON.parse(response))));
       // console.log("This is my books array: " + this.myBooksArray);
       // console.log("This is my bookshelf now:" + this.myBooksArray.push(new Book(JSON.parse(response))));
@@ -486,7 +484,7 @@
       // }
       // results.append(response);
       // this.myBooksArray = results;
-      // console.log(this.updateLibrary());
+      // this.updateLibrary();
 
       // response.cover = $(".editFormWebsiteInput").val(),
       // response.title = $(".editFormTitleInput").val(),
